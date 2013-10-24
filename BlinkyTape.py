@@ -2,7 +2,8 @@ import serial
 import time
 
 class BlinkyTape(object):
-  def __init__(self, port):
+  def __init__(self, port, ledCount = 60):
+    self.ledCount = ledCount
     self.serial = serial.Serial(port, 115200)
     self.show() # Flush
 
@@ -19,13 +20,16 @@ class BlinkyTape(object):
     self.serial.write(chr(255))
     self.serial.flush()
 
+  def displayColor(self, r, g, b):
+    for i in range(0, self.ledCount):
+      self.sendPixel(r,g,b)
+    self.show()
+
 
 if __name__ == "__main__":
 
   import glob
   import optparse 
-
-  LED_COUNT = 60
 
   parser = optparse.OptionParser()
   parser.add_option("-p", "--port", dest="portname",
@@ -38,15 +42,13 @@ if __name__ == "__main__":
     serialPorts = glob.glob("/dev/cu.usbmodem*")
     port = serialPorts[0]
 
-  bb = BlinkyTape(port)
+  bt = BlinkyTape(port)
 
   while True:
 
-    for x in range(0, LED_COUNT):
-      bb.sendPixel(255,255,255)
-    bb.show();
-
-    for x in range(0, LED_COUNT):
-      bb.sendPixel(0,0,0)
-    bb.show()
+    bt.displayColor(255,0,0)
+    bt.displayColor(0,255,0)
+    bt.displayColor(0,0,255)
+    bt.displayColor(255,255,255)
+    bt.displayColor(0,0,0)
 
