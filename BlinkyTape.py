@@ -22,27 +22,23 @@ class BlinkyTape(object):
 
 if __name__ == "__main__":
 
-  import sys
+  import glob
+  import optparse 
 
   LED_COUNT = 60
-  bb = None
 
-  if len(sys.argv) > 1:
-    bb = BlinkyTape(sys.argv[1], "WS2811")
+  parser = optparse.OptionParser()
+  parser.add_option("-p", "--port", dest="portname",
+                    help="serial port (ex: /dev/ttyUSB0)", default=None)
+  (options, args) = parser.parse_args()
 
+  if options.portname != None:
+    port = options.portname
   else:
-    import os
-    import re
-    regex = re.compile(".*usbmodem.*")
-   
-    for filenames in os.walk('/dev'):
-      for filename in filenames[2]:
-        if regex.findall(filename):
-          bb = BlinkyTape(os.path.join("/dev", filename), "WS2811")
+    serialPorts = glob.glob("/dev/cu.usbmodem*")
+    port = serialPorts[0]
 
-  if not bb:
-    sys.exit("Usage: python test.py (path to serial port)")
-
+  bb = BlinkyTape(port)
 
   while True:
 
