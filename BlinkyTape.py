@@ -3,6 +3,7 @@ import time
 
 class BlinkyTape(object):
   def __init__(self, port, ledCount = 60):
+    self.port = port
     self.ledCount = ledCount
     self.serial = serial.Serial(port, 115200)
     self.show() # Flush
@@ -24,6 +25,14 @@ class BlinkyTape(object):
     for i in range(0, self.ledCount):
       self.sendPixel(r,g,b)
     self.show()
+
+  def resetToBootloader(self):
+    """ Reset the blinkytape (note: this disconnects it!) """
+    self.serial.setBaudrate(1200)
+#    self.serial.close()
+#    self.serial = serial.Serial(self.port, 1200)
+#    self.serial.close()
+
 
 
 if __name__ == "__main__":
