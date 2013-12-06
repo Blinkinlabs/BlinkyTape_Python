@@ -1,13 +1,13 @@
 from BlinkyTape import BlinkyTape
+from time import sleep
   
-bb = BlinkyTape('/dev/tty.usbmodemfa131')
+bb = BlinkyTape('/dev/ttyACM1')
 
 while True:
 
-  for x in range(0, 60):
-    bb.sendPixel(10,10,10)
-  bb.show();
-
-  for x in range(0, 60):
-    bb.sendPixel(0,0,0)
-  bb.show()
+  for x in range(0, 30):
+    for y in range(0, 30):
+      l = max(((y-x)%60)-40,0)
+      bb.sendPixel(l,l,l)
+    bb.show()
+    #sleep(0.2)

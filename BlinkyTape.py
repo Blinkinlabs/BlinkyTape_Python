@@ -3,6 +3,7 @@ import time
 
 class BlinkyTape(object):
   def __init__(self, port, ledCount = 60):
+    self.count = 0 # Debug: number of shows
     self.port = port
     self.ledCount = ledCount
     self.serial = serial.Serial(port, 115200)
@@ -15,11 +16,13 @@ class BlinkyTape(object):
     if b == 255: b = 254
     data = chr(r) + chr(g) + chr(b)
     self.serial.write(data)
-    self.serial.flush()
+    #self.serial.flush()	# Queue up more 
 
   def show(self):
-    self.serial.write(chr(255))
+    self.serial.write(chr(0)+chr(0)+chr(255)) # Added 2 more bytes to align commands
     self.serial.flush()
+    self.count = self.count + 1
+    print self.count
 
   def displayColor(self, r, g, b):
     for i in range(0, self.ledCount):
