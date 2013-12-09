@@ -23,7 +23,7 @@ while True:
   print ">> " + str(n)
   for x in range(0, 30):
     for y in range(0, 30):
-      l = max(((y-x)%30)-40,0)
+      l = max(((y-x)%30)-10,0)
       bb.sendPixel(l*3,l*3,l*3)
     bb.show()
   # bb.close()
