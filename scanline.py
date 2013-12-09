@@ -1,7 +1,20 @@
 from BlinkyTape import BlinkyTape
 from time import sleep
+import optparse
 
-bb = BlinkyTape('/dev/ttyACM0', debug=True)
+parser = optparse.OptionParser()
+parser.add_option("-p", "--port", dest="portname",
+                    help="serial port (ex: /dev/ttyUSB0)", default=None)
+(options, args) = parser.parse_args()
+
+if options.portname != None:
+  port = options.portname
+else:
+  print "Usage: python binary_clock.py -p <port name>"
+  print "(ex: python binary_clock.py -p /dev/ttypACM0)"
+  exit()
+	
+bb = BlinkyTape(port, debug=True)
 n = 0
 
 while True:
@@ -15,7 +28,4 @@ while True:
     bb.show()
     bb.close()
     sleep(0.01) # BlinkyTape seems unstable if commands are issued too quickly
-    bb.reopen() # peSerial(?) seems unstable after a los of writes
-  # bb.close()
-  # bb.reopen() 
-
+    bb.reopen() # pySerial(?) seems unstable after a lots of writes
