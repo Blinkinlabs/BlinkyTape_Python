@@ -7,6 +7,7 @@ class BlinkyTape(object):
     self.port = port
     self.ledCount = ledCount
     self.serial = serial.Serial(port, 115200)
+    self.buf = ""
     self.show() # Flush
 
   def sendPixel(self,r,g,b):
@@ -15,11 +16,13 @@ class BlinkyTape(object):
     if g == 255: g = 254
     if b == 255: b = 254
     data = chr(r) + chr(g) + chr(b)
-    self.serial.write(data)
+    self.buf += chr(r) + chr(g) + chr(b)
+    #self.serial.write(data)
     #self.serial.flush()	# Queue up more 
 
   def show(self):
-    self.serial.write(chr(0)+chr(0)+chr(255)) # Added 2 more bytes to align commands
+    self.serial.write(self.buf+chr(0)+chr(0)+chr(255)) # Added 2 more bytes to align commands
+    self.buf=""
     self.serial.flush()
     self.count = self.count + 1
     print self.count
@@ -35,6 +38,9 @@ class BlinkyTape(object):
 #    self.serial.close()
 #    self.serial = serial.Serial(self.port, 1200)
 #    self.serial.close()
+
+  def close(self):
+    self.serial.close()
 
 
 
