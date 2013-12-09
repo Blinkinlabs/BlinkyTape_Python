@@ -1,15 +1,21 @@
 import serial
-import time
+
+# This code assumes stock serialLoop() in the firmware
 
 class BlinkyTape(object):
-  def __init__(self, port, ledCount = 60, debug = False):
-    self.count = 0 # Debug: number of shows
-    self.debug = debug
+  def __init__(self, port, ledCount = 60, debug = False, buffered = True):
     self.port = port
     self.ledCount = ledCount
-    self.serial = serial.Serial(port, 115200)
+    self.position = 0 # Safety: do not write more than ledCount pixels
+    # If True (default), queue up commands until show
+    # If False, send every command (3 bytes) immediately and flush
+    self.buffered = buffered
     self.buf = ""
-    self.show() # Flush
+    # Debug
+    self.debug = debug
+    self.count = 0 # Debug: number of shows
+    # Connect to BlinkyTape
+    self.serial = serial.Serial(port, 115200)
 
   def sendPixel(self,r,g,b):
     data = ""
@@ -17,14 +23,27 @@ class BlinkyTape(object):
     if g == 255: g = 254
     if b == 255: b = 254
     data = chr(r) + chr(g) + chr(b)
-    self.buf += chr(r) + chr(g) + chr(b)
-    #self.serial.write(data)
-    #self.serial.flush()	# Queue up more 
-
+    if self.position < self.ledCount:
+      if self.buffered:
+        self.buf += data
+      else:
+        self.serial.write(data)
+        self.serial.flush()
+      self.position += 1
+    else:
+      raise RuntimeError("Attempting to set pixel outside range! Issue 'show' to reset.")
+      
   def show(self):
-    self.serial.write(self.buf+chr(0)+chr(0)+chr(255)) # Added 2 more bytes to align commands
-    self.buf=""
+    control = chr(0)+chr(0)+chr(255)
+    if self.buffered:
+      self.serial.write(self.buf + control)
+      self.buf=""
+    else:
+      self.serial.write(control)
     self.serial.flush()
+    
+    self.position=0
+    
     if (self.debug):
       self.count = self.count + 1
       print self.count
@@ -41,10 +60,14 @@ class BlinkyTape(object):
 #    self.serial = serial.Serial(self.port, 1200)
 #    self.serial.close()
 
+  def reopen(self):
+    self.serial.close()
+    self.serial = serial.Serial(self.port, 115200)
+
   def close(self):
     self.serial.close()
-
-
+    
+    
 
 if __name__ == "__main__":
 
