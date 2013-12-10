@@ -41,6 +41,7 @@ class BlinkyTape(object):
     self.buffered = buffered
     self.buf = ""
     self.serial = serial.Serial(port, 115200)
+    self.show() # Flush any incomplete data
 
   def sendPixel(self,r,g,b):
     """Sends the next pixel data triplet in RGB format.
