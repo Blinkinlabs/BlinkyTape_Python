@@ -1,3 +1,5 @@
+"""Simple animation example using BlinkyTape.py"""
+
 from BlinkyTape import BlinkyTape
 from time import sleep
 import optparse
@@ -10,22 +12,16 @@ parser.add_option("-p", "--port", dest="portname",
 if options.portname != None:
   port = options.portname
 else:
-  print "Usage: python binary_clock.py -p <port name>"
-  print "(ex: python binary_clock.py -p /dev/ttypACM0)"
+  print "Usage: python scanline.py -p <port name>"
+  print "(ex.: python scanline.py -p /dev/ttypACM0)"
   exit()
 	
-bb = BlinkyTape(port, debug=True)
-n = 0
+blinky = BlinkyTape(port)
 
 while True:
-  # bb = BlinkyTape('/dev/ttyACM0', debug=True)
-  n += 1
-  print ">> " + str(n)
   for x in range(0, 60):
     for y in range(0, 60):
       l = max(((y-x)%60)-40,0)
-      bb.sendPixel(l*3,l*3,l*3)
-    bb.show()
-    bb.close()
-    sleep(0.01) # BlinkyTape seems unstable if commands are issued too quickly
-    bb.reopen() # pySerial(?) seems unstable after a lots of writes
+      blinky.sendPixel(l*3,l*3,l*3)
+    blinky.show()
+    sleep(0.01)
