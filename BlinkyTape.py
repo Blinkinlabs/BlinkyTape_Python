@@ -50,6 +50,16 @@ class BlinkyTape(object):
         self.sendPixel(r, g, b)
     self.show()
 
+  def send_list(self,colors):
+    data = ""
+    for (r,g,b) in colors:
+        if r >= 255: r = 254
+        if g >= 255: g = 254
+        if b >= 255: b = 254
+        data += chr(r) + chr(g) + chr(b)
+    self.serial.write(data)
+    self.show()
+
   def sendPixel(self,r,g,b):
     """Sends the next pixel data triplet in RGB format.
     
