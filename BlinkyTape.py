@@ -43,6 +43,23 @@ class BlinkyTape(object):
     self.serial = serial.Serial(port, 115200)
     self.show() # Flush any incomplete data
 
+  def send_list(self,colors):
+    if len(colors) > self.ledCount:
+        raise RuntimeError("Attempting to set pixel outside range!")
+    for (r,g,b) in colors:
+        self.sendPixel(r, g, b)
+    self.show()
+
+  def send_list(self,colors):
+    data = ""
+    for (r,g,b) in colors:
+        if r >= 255: r = 254
+        if g >= 255: g = 254
+        if b >= 255: b = 254
+        data += chr(r) + chr(g) + chr(b)
+    self.serial.write(data)
+    self.show()
+
   def sendPixel(self,r,g,b):
     """Sends the next pixel data triplet in RGB format.
     
@@ -68,7 +85,7 @@ class BlinkyTape(object):
       self.position += 1
     else:
       raise RuntimeError("Attempting to set pixel outside range!")
-      
+
   def show(self):
     """Sends the command(s) to display all accumulated pixel data.
     
