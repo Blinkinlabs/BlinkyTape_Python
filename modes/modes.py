@@ -3,23 +3,6 @@ from .base import BaseMode
 from .mixins import FixedColorMixin
 
 
-class MovingDotMode(FixedColorMixin, BaseMode):
-    last = 0
-    color = (0, 0, 254)
-    change = 1
-
-    def calc_next_step(self):
-        self.colors[self.last] = (0,0,0)
-        self.last += self.change
-        if self.last >= self.led_count:
-            self.change = -1
-            self.last = self.led_count -1
-        elif self.last <= 0:
-            self.change = 1
-            self.last = 0
-        self.colors[self.last] = self.fixed_color if self.fixed_color else self.color
-
-
 class RandomFlashMode(FixedColorMixin, BaseMode):
     last = 0
 
@@ -83,4 +66,19 @@ class FillUpMode(FixedColorMixin, BaseMode):
                         )
             if not self.fill:
                 self.colors[self.last] = self.fixed_color if self.fixed_color else self.color
+
+
+class FlashMode(FixedColorMixin, BaseMode):
+    on = 0
+    color = (0, 0, 254)
+
+    def calc_next_step(self):
+        if self.on:
+            self.on = 0
+            for i in range(self.led_count):
+                self.colors[i] = (0,0,0)
+        else:
+            self.on = 1
+            for i in range(self.led_count):
+                self.colors[i] = self.fixed_color if self.fixed_color else self.color
 
