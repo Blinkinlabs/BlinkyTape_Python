@@ -18,7 +18,9 @@ class ModeManager(object):
             self.render(mode.get_colors())
             if not mode.no_sleep:
                 renderTime = time.time() - start
-                time.sleep(1.0/mode.fps - renderTime)
+                sleepTime = 1.0/mode.fps - renderTime
+                if sleepTime >= 0.0:
+                    time.sleep(sleepTime)
             diff = time.time() - start
             sys.stdout.write("%.02f fps                    \r" % (1.0/diff))
 
