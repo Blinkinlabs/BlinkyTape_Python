@@ -9,11 +9,11 @@ class MovingDotMode(FixedColorMixin, BaseMode):
     change = 1
 
     def calc_next_step(self):
-        self.colors[self.last] = (0,0,0)
+        self.colors[self.last] = (0, 0, 0)
         self.last += self.change
         if self.last >= self.led_count:
             self.change = -1
-            self.last = self.led_count -1
+            self.last = self.led_count - 1
         elif self.last <= 0:
             self.change = 1
             self.last = 0
@@ -32,7 +32,7 @@ class WideMovingDotMode(FixedColorMixin, BaseMode):
         self.width = width
 
     def calc_next_step(self):
-        self.colors[self.last + (self.width * self.change * (-1))] = (0,0,0)
+        self.colors[self.last + (self.width * self.change * (-1))] = (0, 0, 0)
         self.last += self.change
         if self.last >= self.led_count:
             self.change = -1
@@ -57,5 +57,5 @@ class WideMovingDotMode(FixedColorMixin, BaseMode):
         self.colors[self.last] = self.fixed_color if self.fixed_color else self.color
 
     def get_colors(self):
-        return self.colors[self.width:len(self.colors)-self.width]
+        return self.colors[self.width:len(self.colors) - self.width]
 
