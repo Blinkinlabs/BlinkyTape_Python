@@ -54,9 +54,12 @@ class BlinkyTape(object):
     def send_list(self, colors):
         data = ""
         for (r, g, b) in colors:
-            if r >= 255: r = 254
-            if g >= 255: g = 254
-            if b >= 255: b = 254
+            if r >= 255:
+                r = 254
+            if g >= 255:
+                g = 254
+            if b >= 255:
+                b = 254
             data += chr(r) + chr(g) + chr(b)
         self.serial.write(data)
         self.show()
@@ -70,12 +73,18 @@ class BlinkyTape(object):
 
         """
         data = ""
-        if r < 0: r = 0
-        if g < 0: g = 0
-        if b < 0: b = 0
-        if r >= 255: r = 254
-        if g >= 255: g = 254
-        if b >= 255: b = 254
+        if r < 0:
+            r = 0
+        if g < 0:
+            g = 0
+        if b < 0:
+            b = 0
+        if r >= 255:
+            r = 254
+        if g >= 255:
+            g = 254
+        if b >= 255:
+            b = 254
         data = chr(r) + chr(g) + chr(b)
         if self.position < self.ledCount:
             if self.buffered:
@@ -136,7 +145,7 @@ if __name__ == "__main__":
                       help="serial port (ex: /dev/ttyUSB0)", default=None)
     (options, args) = parser.parse_args()
 
-    if options.portname != None:
+    if options.portname is not None:
         port = options.portname
     else:
         serialPorts = glob.glob("/dev/cu.usbmodem*")

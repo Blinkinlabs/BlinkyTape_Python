@@ -37,7 +37,7 @@ parser.add_option("-p", "--port", dest="portname",
                   help="serial port (ex: /dev/ttyUSB0)", default=None)
 (options, args) = parser.parse_args()
 
-if options.portname != None:
+if options.portname is not None:
     port = options.portname
 else:
     print "Usage: python binary_clock.py -p <port name>"
