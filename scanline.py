@@ -6,22 +6,22 @@ import optparse
 
 parser = optparse.OptionParser()
 parser.add_option("-p", "--port", dest="portname",
-                    help="serial port (ex: /dev/ttyUSB0)", default=None)
+                  help="serial port (ex: /dev/ttyUSB0)", default=None)
 (options, args) = parser.parse_args()
 
-if options.portname != None:
-  port = options.portname
+if options.portname is not None:
+    port = options.portname
 else:
-  print "Usage: python scanline.py -p <port name>"
-  print "(ex.: python scanline.py -p /dev/ttypACM0)"
-  exit()
-	
+    print "Usage: python scanline.py -p <port name>"
+    print "(ex.: python scanline.py -p /dev/ttypACM0)"
+    exit()
+
 blinky = BlinkyTape(port)
 
 while True:
-  for x in range(0, 60):
-    for y in range(0, 60):
-      l = max(((y-x)%60)-40,0)
-      blinky.sendPixel(l*3,l*3,l*3)
-    blinky.show()
-    sleep(0.01)
+    for x in range(0, 60):
+        for y in range(0, 60):
+            l = max(((y - x) % 60) - 40, 0)
+            blinky.sendPixel(l * 3, l * 3, l * 3)
+        blinky.show()
+        sleep(0.01)

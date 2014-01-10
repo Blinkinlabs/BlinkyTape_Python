@@ -9,7 +9,7 @@ class BaseMode(object):
     def __init__(self, fps=None, led_count=None, no_sleep=None, *args, **kwargs):
         self.colors = list()
         for i in range(self.led_count):
-            self.colors.append((0,0,0))
+            self.colors.append((0, 0, 0))
         if fps:
             self.fps = fps
         if led_count:
@@ -22,4 +22,3 @@ class BaseMode(object):
 
     def get_colors(self):
         return self.colors
-
