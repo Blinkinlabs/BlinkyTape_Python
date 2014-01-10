@@ -4,14 +4,13 @@ Displays UNIX epoch time using 32 LEDs (white),
   localtime hours using 6 LEDs (red),
   localtime minutes using 6 LEDs (green),
   localtime seconds using 6 LEDs (blue)
-
 """
 from BlinkyTape import BlinkyTape
 import time
 from datetime import datetime, timedelta
 import optparse
 
-MAX_BRIGHTNESS = 50  # In range(255)
+MAX_BRIGHTNESS = 50  # in range(255)
 
 
 def display(blinky):
@@ -30,12 +29,11 @@ def send_binary(word, length, blinky, r, g, b):
     for bit in array:
         blinky.sendPixel(r * int(bit), g * int(bit), b * int(bit))
 
-###
 
 parser = optparse.OptionParser()
 parser.add_option("-p", "--port", dest="portname",
                   help="serial port (ex: /dev/ttyUSB0)", default=None)
-(options, args) = parser.parse_args()
+options, args = parser.parse_args()
 
 if options.portname is not None:
     port = options.portname
@@ -45,7 +43,7 @@ else:
     exit()
 
 blinky = BlinkyTape(port)
-time.sleep(1 - datetime.now().microsecond / 1000000.0)  # roughly syncronize with seconds
+time.sleep(1 - datetime.now().microsecond / 1000000.0)  # roughly synchronize with seconds
 
 while True:
     timeBegin = time.time()

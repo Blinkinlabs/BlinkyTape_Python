@@ -9,7 +9,6 @@
 
   Note that with the stock firmware changing the maximum brightness
   over serial communication is impossible.
-
 """
 
 import serial
@@ -47,13 +46,13 @@ class BlinkyTape(object):
     def send_list(self, colors):
         if len(colors) > self.ledCount:
             raise RuntimeError("Attempting to set pixel outside range!")
-        for (r, g, b) in colors:
+        for r, g, b in colors:
             self.sendPixel(r, g, b)
         self.show()
 
     def send_list(self, colors):
         data = ""
-        for (r, g, b) in colors:
+        for r, g, b in colors:
             if r >= 255:
                 r = 254
             if g >= 255:
@@ -69,8 +68,7 @@ class BlinkyTape(object):
 
         Values are clamped to 0-254 automatically.
 
-        Throws a RuntimeException if [ledCount] pixels are already set
-
+        Throws a RuntimeException if [ledCount] pixels are already set.
         """
         data = ""
         if r < 0:
@@ -101,7 +99,6 @@ class BlinkyTape(object):
 
         Resets the next pixel position to 0, flushes the serial buffer,
         and discards any accumulated responses from BlinkyTape.
-
         """
         control = chr(0) + chr(0) + chr(255)
         if self.buffered:
@@ -123,7 +120,6 @@ class BlinkyTape(object):
         """Initiates a reset on BlinkyTape.
 
         Note that it will be disconnected.
-
         """
         self.serial.setBaudrate(1200)
         self.close()
