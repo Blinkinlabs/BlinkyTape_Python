@@ -141,4 +141,3 @@ class PoliceMode2(BaseMode):
         self.step += 1
         if self.step >= self.max_steps:
             self.step = 0
-

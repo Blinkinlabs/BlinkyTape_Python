@@ -6,7 +6,7 @@ while True:
 
     for x in range(0, 60):
         bb.sendPixel(10, 10, 10)
-    bb.show();
+    bb.show()
 
     for x in range(0, 60):
         bb.sendPixel(0, 0, 0)

@@ -58,4 +58,3 @@ class WideMovingDotMode(FixedColorMixin, BaseMode):
 
     def get_colors(self):
         return self.colors[self.width:len(self.colors) - self.width]
-

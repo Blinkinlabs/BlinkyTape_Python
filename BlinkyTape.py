@@ -42,7 +42,7 @@ class BlinkyTape(object):
         self.buffered = buffered
         self.buf = ""
         self.serial = serial.Serial(port, 115200)
-        self.show() # Flush any incomplete data
+        self.show()  # Flush any incomplete data
 
     def send_list(self, colors):
         if len(colors) > self.ledCount:
@@ -101,7 +101,7 @@ class BlinkyTape(object):
         else:
             self.serial.write(control)
         self.serial.flush()
-        self.serial.flushInput() # Clear responses from BlinkyTape, if any
+        self.serial.flushInput()  # Clear responses from BlinkyTape, if any
         self.position = 0
 
     def displayColor(self, r, g, b):
@@ -150,4 +150,3 @@ if __name__ == "__main__":
         bt.displayColor(0, 0, 255)
         bt.displayColor(255, 255, 255)
         bt.displayColor(0, 0, 0)
-

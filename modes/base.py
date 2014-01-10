@@ -22,4 +22,3 @@ class BaseMode(object):
 
     def get_colors(self):
         return self.colors
-

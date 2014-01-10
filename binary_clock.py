@@ -11,7 +11,7 @@ import time
 from datetime import datetime, timedelta
 import optparse
 
-MAX_BRIGHTNESS = 50 # In range(255)
+MAX_BRIGHTNESS = 50  # In range(255)
 
 
 def display(blinky):
@@ -20,7 +20,7 @@ def display(blinky):
     send_binary(dt.hour, 6, blinky, MAX_BRIGHTNESS, 0, 0)
     send_binary(dt.minute, 6, blinky, 0, MAX_BRIGHTNESS, 0)
     send_binary(dt.second, 6, blinky, 0, 0, MAX_BRIGHTNESS)
-    send_binary(0, 10, blinky, 0, 0, 0) # padding empty pixels - can add more info
+    send_binary(0, 10, blinky, 0, 0, 0)  # padding empty pixels - can add more info
     blinky.show()
 
 
@@ -45,7 +45,7 @@ else:
     exit()
 
 blinky = BlinkyTape(port)
-time.sleep(1 - datetime.now().microsecond / 1000000.0) # roughly syncronize with seconds
+time.sleep(1 - datetime.now().microsecond / 1000000.0)  # roughly syncronize with seconds
 
 while True:
     timeBegin = time.time()
