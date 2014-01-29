@@ -82,7 +82,7 @@ def color_for_temp(temp):
     color = None
     for temp_ceil in sorted(color_map.iterkeys()):
         color = color_map[temp_ceil]
-        if (temp < temp_ceil):
+        if temp < temp_ceil:
             break
     return adjust_color(color)
 
@@ -91,7 +91,7 @@ def adjust_color(color, dim_factor=0.10):
     r, g, b = color
     h, s, v = colorsys.rgb_to_hsv(r / 256.0, g / 256.0, b / 256.0)
     r, g, b = colorsys.hsv_to_rgb(h, s, v * dim_factor)
-    return (int(r * 256), int(g * 256), int(b * 256))
+    return int(r * 256), int(g * 256), int(b * 256)
 
 
 if __name__ == "__main__":

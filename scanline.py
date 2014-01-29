@@ -19,8 +19,8 @@ else:
 blinky = BlinkyTape(port)
 
 while True:
-    for x in range(0, 60):
-        for y in range(0, 60):
+    for x in range(60):
+        for y in range(60):
             l = max(((y - x) % 60) - 40, 0)
             blinky.sendPixel(l * 3, l * 3, l * 3)
         blinky.show()
