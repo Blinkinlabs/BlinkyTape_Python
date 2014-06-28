@@ -46,12 +46,12 @@ class BlinkyTape(object):
         
             port = listports.listPorts()[0]
 
-        self.port = port
-        self.ledCount = ledCount
-        self.position = 0
-        self.buffered = buffered
-        self.buf = ""
+        self.port = port                # Path of the serial port to connect to
+        self.ledCount = ledCount        # Number of LEDs on the BlinkyTape
+        self.buffered = buffered        # If true, buffer output data before sending
+        self.buf = ""                   # Color data to send
         self.serial = serial.Serial(port, 115200)
+
         self.show()  # Flush any incomplete data
 
     def send_list(self, colors):
@@ -95,20 +95,19 @@ class BlinkyTape(object):
         if b >= 255:
             b = 254
         data = chr(r) + chr(g) + chr(b)
-        if self.position < self.ledCount:
+        if len(data)*3 < self.ledCount:
             if self.buffered:
                 self.buf += data
             else:
                 self.serial.write(data)
                 self.serial.flush()
-            self.position += 1
         else:
             raise RuntimeError("Attempting to set pixel outside range!")
 
     def show(self):
         """Sends the command(s) to display all accumulated pixel data.
 
-        Resets the next pixel position to 0, flushes the serial buffer,
+        Resets the pixel buffer, flushes the serial buffer,
         and discards any accumulated responses from BlinkyTape.
         """
         control = chr(0) + chr(0) + chr(255)
@@ -119,7 +118,6 @@ class BlinkyTape(object):
             self.serial.write(control)
         self.serial.flush()
         self.serial.flushInput()  # Clear responses from BlinkyTape, if any
-        self.position = 0
 
     def displayColor(self, r, g, b):
         """Fills [ledCount] pixels with RGB color and shows it."""
