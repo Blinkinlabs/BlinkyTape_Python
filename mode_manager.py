@@ -4,7 +4,7 @@ from BlinkyTape import BlinkyTape
 
 
 class ModeManager(object):
-    def __init__(self, device='/dev/ttyACM0', *args, **kwargs):
+    def __init__(self, device=None, *args, **kwargs):
         self.bb = BlinkyTape(device)
 
     def render(self, colors):

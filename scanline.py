@@ -8,13 +8,7 @@ parser = optparse.OptionParser()
 parser.add_option("-p", "--port", dest="portname",
                   help="serial port (ex: /dev/ttyUSB0)", default=None)
 (options, args) = parser.parse_args()
-
-if options.portname is not None:
-    port = options.portname
-else:
-    print "Usage: python scanline.py -p <port name>"
-    print "(ex.: python scanline.py -p /dev/ttypACM0)"
-    exit()
+port = options.portname
 
 blinky = BlinkyTape(port)
 

@@ -35,12 +35,7 @@ parser.add_option("-p", "--port", dest="portname",
                   help="serial port (ex: /dev/ttyUSB0)", default=None)
 options, args = parser.parse_args()
 
-if options.portname is not None:
-    port = options.portname
-else:
-    print "Usage: python binary_clock.py -p <port name>"
-    print "(ex: python binary_clock.py -p /dev/ttypACM0)"
-    exit()
+port = options.portname
 
 blinky = BlinkyTape(port)
 time.sleep(1 - datetime.now().microsecond / 1000000.0)  # roughly synchronize with seconds

@@ -12,10 +12,10 @@
 """
 
 import serial
-
+import ListPorts
 
 class BlinkyTape(object):
-    def __init__(self, port, ledCount=60, buffered=True):
+    def __init__(self, port=None, ledCount=60, buffered=True):
         """Creates a BlinkyTape object and opens the port.
 
         Parameters:
@@ -35,6 +35,10 @@ class BlinkyTape(object):
             with immediate flush of the serial buffers (slower).
 
         """
+
+        if port == None:
+            port = ListPorts.listPorts()[0]
+
         self.port = port
         self.ledCount = ledCount
         self.position = 0
@@ -141,11 +145,7 @@ if __name__ == "__main__":
                       help="serial port (ex: /dev/ttyUSB0)", default=None)
     (options, args) = parser.parse_args()
 
-    if options.portname is not None:
-        port = options.portname
-    else:
-        serialPorts = glob.glob("/dev/cu.usbmodem*")
-        port = serialPorts[0]
+    port = options.portname
 
     bt = BlinkyTape(port)
 

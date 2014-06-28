@@ -1,13 +1,16 @@
 from BlinkyTape import BlinkyTape
+import time
 
-bb = BlinkyTape('/dev/tty.usbmodemfa131')
+bb = BlinkyTape()
 
 while True:
 
     for x in range(60):
-        bb.sendPixel(10, 10, 10)
+        bb.sendPixel(255, 255, 255)
     bb.show()
+    time.sleep(.03)
 
     for x in range(60):
         bb.sendPixel(0, 0, 0)
     bb.show()
+    time.sleep(.03)
