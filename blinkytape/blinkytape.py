@@ -20,10 +20,12 @@ class BlinkyTape(object):
 
         Parameters:
           port
-            Required, port name as accepted by PySerial library:
+            Optional, port name as accepted by PySerial library:
             http://pyserial.sourceforge.net/pyserial_api.html#serial.Serial
             It is the same port name that is used in Arduino IDE.
             Ex.: COM5 (Windows), /dev/ttyACM0 (Linux).
+            If no port is specified, the library will attempt to connect
+            to the first port that looks like a BlinkyTape.
           ledCount
             Optional, total number of LEDs to work with,
             defaults to 60 LEDs. The limit is enforced and an
@@ -36,7 +38,12 @@ class BlinkyTape(object):
 
         """
 
+        # If a port was not specified, try to find one and connect automatically
         if port == None:
+            ports = listports.listPorts()
+            if len(ports) == 0:
+                raise IOError("BlinkyTape not found!")
+        
             port = listports.listPorts()[0]
 
         self.port = port
