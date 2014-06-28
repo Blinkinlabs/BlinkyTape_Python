@@ -5,7 +5,7 @@ Displays UNIX epoch time using 32 LEDs (white),
   localtime minutes using 6 LEDs (green),
   localtime seconds using 6 LEDs (blue)
 """
-from BlinkyTape import BlinkyTape
+import blinkytape
 import time
 from datetime import datetime, timedelta
 import optparse
@@ -37,7 +37,7 @@ options, args = parser.parse_args()
 
 port = options.portname
 
-blinky = BlinkyTape(port)
+blinky = blinkytape.BlinkyTape(port)
 time.sleep(1 - datetime.now().microsecond / 1000000.0)  # roughly synchronize with seconds
 
 while True:

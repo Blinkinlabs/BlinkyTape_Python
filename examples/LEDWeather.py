@@ -14,7 +14,7 @@ import colorsys
 import os
 import glob
 
-import BlinkyTape
+import blinkytape
 
 # Get your API key at http://www.wunderground.com/weather/api
 # Specify it here or in the WUNDERGROUND_KEY environment var. E.g.:
@@ -27,17 +27,9 @@ url = "http://api.wunderground.com/api/{}/hourly/q/{}/{}.json".format(apikey, st
 
 
 def connect():
-    serialPorts = glob.glob("/dev/cu.usbmodem*")
-    port = serialPorts[0]
-
-    if not port:
-        sys.exit("Could not locate a BlinkyTape.")
-
-    print "BlinkyTape found at: %s" % port
-
-    bt = BlinkyTape.BlinkyTape(port)
-    bt.displayColor(0, 0, 0)
-    return bt
+    blinky = blinkytape.BlinkyTape()
+    blinky.displayColor(0, 0, 0)
+    return blinky
 
 
 def get_hourly_data():
@@ -96,7 +88,7 @@ def adjust_color(color, dim_factor=0.10):
 
 if __name__ == "__main__":
 
-    bt = connect()
+    blinky = connect()
     data = get_hourly_data()
 
     if not data:
@@ -108,5 +100,5 @@ if __name__ == "__main__":
         temp = int(hour['temp']['english'])
         r, g, b = color_for_temp(temp)
         print "Temp: {}. Color: {},{},{}".format(temp, r, g, b)
-        bt.sendPixel(r, g, b)
-    bt.show()
+        blinky.sendPixel(r, g, b)
+    blinky.show()

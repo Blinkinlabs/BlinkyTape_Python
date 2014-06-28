@@ -12,7 +12,7 @@
 """
 
 import serial
-import ListPorts
+import listports
 
 class BlinkyTape(object):
     def __init__(self, port=None, ledCount=60, buffered=True):
@@ -37,7 +37,7 @@ class BlinkyTape(object):
         """
 
         if port == None:
-            port = ListPorts.listPorts()[0]
+            port = listports.listPorts()[0]
 
         self.port = port
         self.ledCount = ledCount

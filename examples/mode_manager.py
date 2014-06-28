@@ -1,14 +1,14 @@
 import time
 import sys
-from BlinkyTape import BlinkyTape
+import blinkytape
 
 
 class ModeManager(object):
     def __init__(self, device=None, *args, **kwargs):
-        self.bb = BlinkyTape(device)
+        self.blinky = blinkytape.BlinkyTape(device)
 
     def render(self, colors):
-        self.bb.send_list(colors)
+        self.blinky.send_list(colors)
 
     def run_mode(self, mode):
         while True:

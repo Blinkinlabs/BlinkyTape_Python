@@ -1,7 +1,7 @@
 """Simple animation example using BlinkyTape.py"""
 
-from BlinkyTape import BlinkyTape
-from time import sleep
+import blinkytape
+import time 
 import optparse
 
 parser = optparse.OptionParser()
@@ -10,7 +10,7 @@ parser.add_option("-p", "--port", dest="portname",
 (options, args) = parser.parse_args()
 port = options.portname
 
-blinky = BlinkyTape(port)
+blinky = blinkytape.BlinkyTape(port)
 
 while True:
     for x in range(60):
@@ -18,4 +18,4 @@ while True:
             l = max(((y - x) % 60) - 40, 0)
             blinky.sendPixel(l * 3, l * 3, l * 3)
         blinky.show()
-        sleep(0.01)
+        time.sleep(0.01)
