@@ -1,12 +1,9 @@
-from BlinkyTape import BlinkyTape
-
-
 class BaseMode(object):
     fps = 10
     led_count = 60
     no_sleep = False
 
-    def __init__(self, fps=None, led_count=None, no_sleep=None, *args, **kwargs):
+    def __init__(self, fps=None, led_count=None, no_sleep=None, *a, **kw):
         self.colors = list()
         for i in range(self.led_count):
             self.colors.append((0, 0, 0))

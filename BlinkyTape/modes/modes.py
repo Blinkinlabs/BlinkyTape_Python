@@ -33,39 +33,47 @@ class FillUpMode(FixedColorMixin, BaseMode):
     def calc_next_step(self):
         if self.clear_last:
             self.colors[self.last] = 0, 0, 0
+
         if self.fill:
             self.last -= 1
-            self.colors[self.last] = self.fixed_color if self.fixed_color else self.color
+            self.colors[self.last] = self.pick_color()
+
             if self.last > self.pos:
                 self.clear_last = 1
             else:
                 self.last = self.led_count - 1
                 self.pos += 1
                 self.clear_last = 0
+
                 if self.pos == self.led_count:
                     self.pos = 0
                     self.fill = 0
                     self.last = 0
                     self.clear_last = 1
+
         else:
             self.clear_last = 1
             self.last -= 1
+
             if self.last < 0:
                 self.pos += 1
                 self.last = self.pos
+
                 if self.pos == self.led_count:
                     self.pos = 0
                     self.fill = 1
                     self.clear_last = 0
                     self.color = 0, 0, 0
-                    while self.color == 0, 0, 0:
+
+                    while self.color == (0, 0, 0):
                         self.color = (
                             random.randint(0, 1) * 254,
                             random.randint(0, 1) * 254,
                             random.randint(0, 1) * 254
                         )
+
             if not self.fill:
-                self.colors[self.last] = self.fixed_color if self.fixed_color else self.color
+                self.colors[self.last] = self.pick_color()
 
 
 class FlashMode(FixedColorMixin, BaseMode):
@@ -80,7 +88,7 @@ class FlashMode(FixedColorMixin, BaseMode):
         else:
             self.on = 1
             for i in range(self.led_count):
-                self.colors[i] = self.fixed_color if self.fixed_color else self.color
+                self.colors[i] = self.pick_color()
 
 
 class PoliceMode(BaseMode):
@@ -114,28 +122,37 @@ class PoliceMode2(BaseMode):
     mid_width = 20
 
     def calc_next_step(self):
+        start = self.led_count / 2 - self.mid_width / 2
+        start_alt = self.led_count / 2 + self.mid_width / 2
+        end = self.led_count / 2
+
         if self.step % 4 == 0:
             if self.mid_left:
-                for i in range(self.led_count / 2 - self.mid_width / 2, self.led_count / 2):
-                    self.colors[i] = 0, 0, 0
-                for i in range(self.led_count / 2, self.led_count / 2 + self.mid_width / 2):
-                    self.colors[i] = 0, 0, 254
                 self.mid_left = 0
-            else:
-                for i in range(self.led_count / 2 - self.mid_width / 2, self.led_count / 2):
-                    self.colors[i] = 254, 0, 0
-                for i in range(self.led_count / 2, self.led_count / 2 + self.mid_width / 2):
+
+                for i in range(start, end):
                     self.colors[i] = 0, 0, 0
+                for i in range(end, start_alt):
+                    self.colors[i] = 0, 0, 254
+
+            else:
                 self.mid_left = 1
+
+                for i in range(start, end):
+                    self.colors[i] = 254, 0, 0
+                for i in range(end, start_alt):
+                    self.colors[i] = 0, 0, 0
+
         if self.step <= 1:
-            for i in range(self.led_count / 2 - self.mid_width / 2):
+            for i in range(start):
                 self.colors[i] = 0, 0, 0
-            for i in range(self.led_count / 2 + self.mid_width / 2, self.led_count):
+            for i in range(start_alt, self.led_count):
                 self.colors[i] = 0, 0, 0
+
         else:
-            for i in range(self.led_count / 2 - self.mid_width / 2):
+            for i in range(start):
                 self.colors[i] = 0, 0, 254
-            for i in range(self.led_count / 2 + self.mid_width / 2, self.led_count):
+            for i in range(start_alt, self.led_count):
                 self.colors[i] = 254, 0, 0
 
         self.step += 1

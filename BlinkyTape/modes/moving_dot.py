@@ -17,7 +17,7 @@ class MovingDotMode(FixedColorMixin, BaseMode):
         elif self.last <= 0:
             self.change = 1
             self.last = 0
-        self.colors[self.last] = self.fixed_color if self.fixed_color else self.color
+        self.colors[self.last] = self.pick_color()
 
 
 class WideMovingDotMode(FixedColorMixin, BaseMode):
@@ -54,7 +54,7 @@ class WideMovingDotMode(FixedColorMixin, BaseMode):
                     random.randint(0, 1) * 254,
                     random.randint(0, 1) * 254
                 )
-        self.colors[self.last] = self.fixed_color if self.fixed_color else self.color
+        self.colors[self.last] = self.pick_color()
 
     def get_colors(self):
         return self.colors[self.width:len(self.colors) - self.width]

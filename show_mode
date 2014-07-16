@@ -1,0 +1,60 @@
+#!/usr/bin/env python
+"""
+    Run one of the modes distributed with the BlinkyTape module.
+"""
+import argparse
+import os
+from BlinkyTape import ModeManager, modes
+
+
+def mode_list():
+    """
+        Returns a list of available modes
+    """
+    results = []
+
+    for mode in modes.__dict__:
+        if isinstance(modes.__dict__[mode], type):
+            if issubclass(modes.__dict__[mode], modes.BaseMode):
+                results.append(mode)
+
+    return results
+
+
+def show_modes():
+    """
+        Print the list of available modes.
+    """
+    print "\nValid modes:\n"
+
+    for mode in mode_list():
+        print "  %s" % mode
+
+
+if __name__ == '__main__':
+    # Parse our arguments
+    parser = argparse.ArgumentParser()
+    parser.add_argument('port', nargs='?', help='Serial port for BlinkyTape')
+    parser.add_argument('mode', nargs='?', help='Mode to run')
+    args = parser.parse_args()
+
+    if not args.mode or not args.port:
+        # The user didn't give us everything we need
+        parser.print_help()
+        show_modes()
+        exit(1)
+
+    # Sanity checks
+    if args.mode not in modes.__dict__:
+        print 'Unknown mode: %s' % args.mode
+        show_modes()
+        exit(1)
+
+    if not os.path.exists(args.port):
+        print 'No such serial port: %s' % args.port
+        exit(1)
+
+    # Start the show
+    mode = modes.__dict__[args.mode]()
+    mm = ModeManager(args.port)
+    mm.run_mode(mode)

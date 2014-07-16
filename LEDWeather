@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 # Original example by Zach Hoeken Smith (http://hoektronics.com)
 # Modified for the new Blinkyboard library by Max Henstell 3/2013
 # Modified for Weather Underground by Marty McGuire 4/2013
@@ -8,7 +9,6 @@
 import time
 import urllib
 import json
-import tempfile
 import sys
 import colorsys
 import os
@@ -19,11 +19,12 @@ import BlinkyTape
 # Get your API key at http://www.wunderground.com/weather/api
 # Specify it here or in the WUNDERGROUND_KEY environment var. E.g.:
 # $ WUNDERGROUND_KEY=abcdefg123456 python LEDWeather.py
-#apikey = "abcdefg123456"
 apikey = os.environ.get('WUNDERGROUND_KEY')
+# apikey = abcdefg123456
 state = "NV"
 city = "Las_Vegas"
-url = "http://api.wunderground.com/api/{}/hourly/q/{}/{}.json".format(apikey, state, city)
+url = "http://api.wunderground.com/api/{0}/hourly/q/{1}/{2}.json"
+url = url.format(apikey, state, city)
 
 
 def connect():
@@ -100,8 +101,11 @@ if __name__ == "__main__":
     data = get_hourly_data()
 
     if not data:
-        sys.exit(
-            "Could not fetch weather data. Check your proxy settings and try again. Try: export http_proxy=PROXY_IP:PROXY_PORT before running this script.")
+        sys.exit((
+            "Could not fetch weather data. Check your proxy settings",
+            " and try again. Try: export http_proxy=PROXY_IP:PROXY_PORT",
+            " before running this script."
+        ))
 
     print data
     for hour in data['hourly_forecast']:

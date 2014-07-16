@@ -1,2 +1,3 @@
-pyserial
+argparse
 ipython
+pyserial

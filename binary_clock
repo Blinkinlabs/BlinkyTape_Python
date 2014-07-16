@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 """Binary clock example using BlinkyTape.py
 
 Displays UNIX epoch time using 32 LEDs (white),
@@ -5,29 +6,29 @@ Displays UNIX epoch time using 32 LEDs (white),
   localtime minutes using 6 LEDs (green),
   localtime seconds using 6 LEDs (blue)
 """
-from BlinkyTape import BlinkyTape
-import time
-from datetime import datetime, timedelta
 import optparse
+import time
+from BlinkyTape import BlinkyTape
+from datetime import datetime
 
-MAX_BRIGHTNESS = 50  # in range(255)
+BRIGHTNESS = 50  # in range(255)
 
 
-def display(blinky):
+def display(bt):
     dt = datetime.now()
-    send_binary(int(time.time()), 32, blinky, MAX_BRIGHTNESS, MAX_BRIGHTNESS, MAX_BRIGHTNESS)
-    send_binary(dt.hour, 6, blinky, MAX_BRIGHTNESS, 0, 0)
-    send_binary(dt.minute, 6, blinky, 0, MAX_BRIGHTNESS, 0)
-    send_binary(dt.second, 6, blinky, 0, 0, MAX_BRIGHTNESS)
-    send_binary(0, 10, blinky, 0, 0, 0)  # padding empty pixels - can add more info
-    blinky.show()
+    send_binary(int(time.time()), 32, bt, BRIGHTNESS, BRIGHTNESS, BRIGHTNESS)
+    send_binary(dt.hour, 6, bt, BRIGHTNESS, 0, 0)
+    send_binary(dt.minute, 6, bt, 0, BRIGHTNESS, 0)
+    send_binary(dt.second, 6, bt, 0, 0, BRIGHTNESS)
+    send_binary(0, 10, bt, 0, 0, 0)  # padding empty pixels - can add more info
+    bt.show()
 
 
-def send_binary(word, length, blinky, r, g, b):
+def send_binary(word, length, bt, r, g, b):
     fmt = "{0:0" + str(length) + "b}"
     array = list(fmt.format(word))
     for bit in array:
-        blinky.sendPixel(r * int(bit), g * int(bit), b * int(bit))
+        bt.sendPixel(r * int(bit), g * int(bit), b * int(bit))
 
 
 parser = optparse.OptionParser()
@@ -42,13 +43,15 @@ else:
     print "(ex: python binary_clock.py -p /dev/ttypACM0)"
     exit()
 
-blinky = BlinkyTape(port)
-time.sleep(1 - datetime.now().microsecond / 1000000.0)  # roughly synchronize with seconds
+bt = BlinkyTape(port)
+
+# roughly synchronize with seconds
+time.sleep(1 - datetime.now().microsecond / 1000000.0)
 
 while True:
     timeBegin = time.time()
 
-    display(blinky)
+    display(bt)
 
     timeEnd = time.time()
     timeElapsed = timeEnd - timeBegin
