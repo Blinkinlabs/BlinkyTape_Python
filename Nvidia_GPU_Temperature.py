@@ -1,3 +1,7 @@
+""" Easily see your GPU temperature while gaming!  This sets the LED colors base on your Nvidia GPU temperature, every second.  
+60F = green, 70F = yellow, 80F = red
+"""
+
 import time
 from BlinkyTape import BlinkyTape
 import subprocess
