@@ -8,8 +8,9 @@ import subprocess
 import os
 import re
 
+## To find your COM port number in Windows, run "Pattern Paint -> Help -> System Information"
 #bb = BlinkyTape('/dev/tty.usbmodemfa131')
-bb = BlinkyTape('COM8')
+bb = BlinkyTape('COM3')
 
 while True:
 
