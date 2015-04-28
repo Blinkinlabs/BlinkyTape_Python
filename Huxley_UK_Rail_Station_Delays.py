@@ -26,8 +26,9 @@ import tempfile
 accessToken = "DA1C7740-9DA0-11E4-80E6-A920340000B1"
 
 # CRS codes here: http://www.nationalrail.co.uk/static/documents/content/station_codes.csv
-crs = "clj"       # Clapham Junction
-filterCrs = "wat" # to Waterloo
+crs = "clj"        # Clapham Junction
+filterCrs = "wat"  # to Waterloo
+trainTime = "0825" # STD of a specific train to look for (24hr format HHmm) blank for none
 
 
 # Default Blinky Tape port on Raspberry Pi is /dev/ttyACM0
@@ -43,7 +44,7 @@ else:
     print "(ex.: python huxley.py -p /dev/ttyACM0)"
     exit()
 
-url = "https://huxley.apphb.com/delays/{}/to/{}/50?accessToken={}".format(crs, filterCrs, accessToken)
+url = "https://huxley.apphb.com/delays/{}/to/{}/50/{}?accessToken={}".format(crs, filterCrs, trainTime, accessToken)
 
 bt = BlinkyTape(port)
 
