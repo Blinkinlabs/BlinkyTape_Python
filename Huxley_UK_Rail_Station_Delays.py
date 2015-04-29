@@ -8,13 +8,14 @@ If there are delays between the configured stations then the Blinky Tape will th
 
 To run on default (Raspberry Pi) USB serial port: python Huxley_UK_Rail_Station_Delays.py &
 
-(C) 2015 James Singleton
+(C) 2015 James Singleton (https://unop.uk)
 MIT Licensed
 
 """
 
 from BlinkyTape import BlinkyTape
 from time import sleep
+from itertools import chain
 import optparse
 import urllib
 import json
@@ -26,8 +27,9 @@ import tempfile
 accessToken = "DA1C7740-9DA0-11E4-80E6-A920340000B1"
 
 # CRS codes here: http://www.nationalrail.co.uk/static/documents/content/station_codes.csv
-crs = "clj"       # Clapham Junction
-filterCrs = "wat" # to Waterloo
+crs = "clj"        # Clapham Junction
+filterCrs = "wat"  # to Waterloo
+trainTime = ""     # STD of a specific train to look for (24hr format HHmm) blank for none
 
 
 # Default Blinky Tape port on Raspberry Pi is /dev/ttyACM0
@@ -39,11 +41,11 @@ parser.add_option("-p", "--port", dest="portname",
 if options.portname is not None:
     port = options.portname
 else:
-    print "Usage: python huxley.py -p <port name>"
-    print "(ex.: python huxley.py -p /dev/ttyACM0)"
+    print "Usage: python Huxley_UK_Rail_Station_Delays.py -p <port name>"
+    print "(ex.: python Huxley_UK_Rail_Station_Delays.py -p /dev/ttyACM0)"
     exit()
 
-url = "https://huxley.apphb.com/delays/{}/to/{}/50?accessToken={}".format(crs, filterCrs, accessToken)
+url = "https://huxley.apphb.com/delays/{}/to/{}/50/{}?accessToken={}".format(crs, filterCrs, trainTime, accessToken)
 
 bt = BlinkyTape(port)
 
@@ -67,12 +69,9 @@ while True:
         stationStatus["locationName"], stationStatus["filterLocationName"], stationStatus["delays"])
 
         # Throb red for delays (or black for none) - takes at least 2 min
-        for xx in range(0,60):
-            for xy in xrange(0, 100):
-                bt.displayColor(xy * alert, 0, 0)
-                sleep(0.01)
-            for yx in xrange(100, 0, -1):
-                bt.displayColor(yx * alert, 0, 0)
+        for x in xrange(60):
+            for y in chain(xrange(100), xrange(100, 0, -1)):
+                bt.displayColor(y * alert, 0, 0)
                 sleep(0.01)
 
     except:
