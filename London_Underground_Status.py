@@ -42,8 +42,8 @@ colours = { "bakerloo" : (137, 78, 36),
             "northern" : (0, 0, 0),
             "piccadilly" : (0, 25, 168),
             "victoria" : (0, 160, 226),
-            "waterloo-city" : (118, 208, 189)
-            "tfl-rail" : (36, 52, 140)}
+            "waterloo-city" : (118, 208, 189),
+            "tfl-rail" : (36, 52, 140) }
 
 bt = BlinkyTape(port)
 
