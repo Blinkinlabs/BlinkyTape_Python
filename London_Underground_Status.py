@@ -61,6 +61,9 @@ while True:
         if not len(lines) or lines is None:
             raise Exception("Error parsing data")
 
+        # Sort the lines
+        lines.sort(key = lambda l: l['modeName'], reverse = True)
+
         # Takes at least 2 min
         for cycles in xrange(120):
             for pixel in xrange(2):
