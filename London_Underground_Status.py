@@ -28,7 +28,7 @@ else:
     print "(ex.: python London_Underground_Status.py -p /dev/ttyACM0)"
     exit()
 
-url = "https://api.tfl.gov.uk/line/mode/tube,overground,dlr/status"
+url = "https://api.tfl.gov.uk/line/mode/tube,overground,dlr,tflrail/status"
 
 colours = { "bakerloo" : (137, 78, 36),
             "central" : (220, 36, 31),
@@ -42,7 +42,8 @@ colours = { "bakerloo" : (137, 78, 36),
             "northern" : (0, 0, 0),
             "piccadilly" : (0, 25, 168),
             "victoria" : (0, 160, 226),
-            "waterloo-city" : (118, 208, 189) }
+            "waterloo-city" : (118, 208, 189)
+            "tfl-rail" : (36, 52, 140)}
 
 bt = BlinkyTape(port)
 
@@ -62,7 +63,7 @@ while True:
 
         # Takes at least 2 min
         for cycles in xrange(120):
-            for pixel in xrange(4):
+            for pixel in xrange(2):
                 bt.sendPixel(0, 0, 0)
             for line in lines:
                 alert = False
@@ -81,7 +82,7 @@ while True:
                         bt.sendPixel(l * r, l * g, l * b)
                     else:
                         bt.sendPixel(r, g, b)
-            for pixel in xrange(4):        
+            for pixel in xrange(2):        
                 bt.sendPixel(0, 0, 0)
             bt.show()
             sleep(0.5)
