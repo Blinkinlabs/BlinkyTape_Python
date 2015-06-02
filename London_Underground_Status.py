@@ -43,7 +43,7 @@ colours = { "bakerloo" : (137, 78, 36),
             "piccadilly" : (0, 25, 168),
             "victoria" : (0, 160, 226),
             "waterloo-city" : (118, 208, 189),
-            "tfl-rail" : (36, 52, 140) }
+            "tfl-rail" : (0, 25, 168) }
 
 bt = BlinkyTape(port)
 
@@ -65,7 +65,7 @@ while True:
         lines.sort(key = lambda l: l['modeName'], reverse = True)
 
         # Takes at least 2 min
-        for cycles in xrange(120):
+        for cycles in xrange(240):
             for pixel in xrange(2):
                 bt.sendPixel(0, 0, 0)
             for line in lines:
