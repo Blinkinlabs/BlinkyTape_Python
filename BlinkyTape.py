@@ -13,6 +13,16 @@
 
 import serial
 
+# For Python3 support- always run strings through a bytes converter
+import sys
+if sys.version_info < (3,):
+    def b(x):
+        return x
+else:
+    import codecs
+    def b(x):
+        return codecs.latin_1_encode(x)[0]
+
 
 class BlinkyTape(object):
     def __init__(self, port, ledCount=60, buffered=True):
@@ -60,7 +70,7 @@ class BlinkyTape(object):
             if b >= 255:
                 b = 254
             data += chr(r) + chr(g) + chr(b)
-        self.serial.write(data)
+        self.serial.write(b(data))
         self.show()
 
     def sendPixel(self, r, g, b):
@@ -88,7 +98,7 @@ class BlinkyTape(object):
             if self.buffered:
                 self.buf += data
             else:
-                self.serial.write(data)
+                self.serial.write(b(data))
                 self.serial.flush()
             self.position += 1
         else:
@@ -102,10 +112,10 @@ class BlinkyTape(object):
         """
         control = chr(0) + chr(0) + chr(255)
         if self.buffered:
-            self.serial.write(self.buf + control)
+            self.serial.write(b(self.buf + control))
             self.buf = ""
         else:
-            self.serial.write(control)
+            self.serial.write(b(control))
         self.serial.flush()
         self.serial.flushInput()  # Clear responses from BlinkyTape, if any
         self.position = 0
