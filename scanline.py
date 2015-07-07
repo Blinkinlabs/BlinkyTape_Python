@@ -12,8 +12,8 @@ parser.add_option("-p", "--port", dest="portname",
 if options.portname is not None:
     port = options.portname
 else:
-    print "Usage: python scanline.py -p <port name>"
-    print "(ex.: python scanline.py -p /dev/ttypACM0)"
+    print("Usage: python scanline.py -p <port name>")
+    print("(ex.: python scanline.py -p /dev/ttypACM0)")
     exit()
 
 blinky = BlinkyTape(port)
