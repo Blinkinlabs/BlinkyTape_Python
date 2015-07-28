@@ -112,7 +112,16 @@ class BlinkyTape(object):
         """
         control = chr(255)
         if self.buffered:
-            self.serial.write(encode(self.buf + control))
+            # Fix an OS X specific bug where sending more than 383 bytes of data at once
+            # hangs the BlinkyTape controller. Why this is???
+            # TODO: Test me on other platforms
+            CHUNK_SIZE = 300
+
+            self.buf += control
+            for i in range(0, len(self.buf), CHUNK_SIZE):
+                self.serial.write(encode(self.buf[i:i+CHUNK_SIZE]))
+                self.serial.flush()
+
             self.buf = ""
         else:
             self.serial.write(encode(control))
