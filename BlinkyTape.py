@@ -16,11 +16,11 @@ import serial
 # For Python3 support- always run strings through a bytes converter
 import sys
 if sys.version_info < (3,):
-    def b(x):
+    def encode(x):
         return x
 else:
     import codecs
-    def b(x):
+    def encode(x):
         return codecs.latin_1_encode(x)[0]
 
 
@@ -70,7 +70,7 @@ class BlinkyTape(object):
             if b >= 255:
                 b = 254
             data += chr(r) + chr(g) + chr(b)
-        self.serial.write(b(data))
+        self.serial.write(encode(data))
         self.show()
 
     def sendPixel(self, r, g, b):
@@ -98,7 +98,7 @@ class BlinkyTape(object):
             if self.buffered:
                 self.buf += data
             else:
-                self.serial.write(b(data))
+                self.serial.write(encode(data))
                 self.serial.flush()
             self.position += 1
         else:
@@ -110,12 +110,12 @@ class BlinkyTape(object):
         Resets the next pixel position to 0, flushes the serial buffer,
         and discards any accumulated responses from BlinkyTape.
         """
-        control = chr(0) + chr(0) + chr(255)
+        control = chr(255)
         if self.buffered:
-            self.serial.write(b(self.buf + control))
+            self.serial.write(encode(self.buf + control))
             self.buf = ""
         else:
-            self.serial.write(b(control))
+            self.serial.write(encode(control))
         self.serial.flush()
         self.serial.flushInput()  # Clear responses from BlinkyTape, if any
         self.position = 0
@@ -149,6 +149,11 @@ if __name__ == "__main__":
     parser = optparse.OptionParser()
     parser.add_option("-p", "--port", dest="portname",
                       help="serial port (ex: /dev/ttyUSB0)", default=None)
+    parser.add_option("-c", "--ledcount", dest="ledcount",
+                      help="number of LEDs attached", type="int", default=60)
+    parser.add_option("-b", action="store_true", default="True", dest="buffered")
+    parser.add_option("-u", action="store_false", dest="buffered")
+
     (options, args) = parser.parse_args()
 
     if options.portname is not None:
@@ -157,7 +162,7 @@ if __name__ == "__main__":
         serialPorts = glob.glob("/dev/cu.usbmodem*")
         port = serialPorts[0]
 
-    bt = BlinkyTape(port)
+    bt = BlinkyTape(port, options.ledcount, options.buffered)
 
     while True:
         bt.displayColor(255, 0, 0)
