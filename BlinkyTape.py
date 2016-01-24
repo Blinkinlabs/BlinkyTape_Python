@@ -63,13 +63,15 @@ class BlinkyTape(object):
     def send_list(self, colors):
         data = ""
         for r, g, b in colors:
-            if r >= 255:
-                r = 254
-            if g >= 255:
-                g = 254
-            if b >= 255:
-                b = 254
             data += chr(r) + chr(g) + chr(b)
+
+        data = data.replace(chr(255),chr(254))
+
+        self.serial.write(encode(data))
+        self.show()
+
+    def sendData(self, data):
+        data = data.replace(chr(255), chr(254))
         self.serial.write(encode(data))
         self.show()
 
@@ -81,19 +83,9 @@ class BlinkyTape(object):
         Throws a RuntimeException if [ledCount] pixels are already set.
         """
         data = ""
-        if r < 0:
-            r = 0
-        if g < 0:
-            g = 0
-        if b < 0:
-            b = 0
-        if r >= 255:
-            r = 254
-        if g >= 255:
-            g = 254
-        if b >= 255:
-            b = 254
         data = chr(r) + chr(g) + chr(b)
+        data = data.replace(chr(255),chr(254))
+
         if self.position < self.ledCount:
             if self.buffered:
                 self.buf += data
