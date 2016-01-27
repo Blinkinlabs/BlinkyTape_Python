@@ -1,8 +1,8 @@
 from BlinkyTape import BlinkyTape
 import time
 
-#bb = BlinkyTape('/dev/tty.usbmodemfa131')
-bb = BlinkyTape('COM8')
+bb = BlinkyTape('/dev/ttyACM0', 120)
+#bb = BlinkyTape('COM8')
 
 while True:
 
@@ -12,7 +12,7 @@ while True:
 
     time.sleep(.5)
 
-    for x in range(60):
+    for x in range(120):
         bb.sendPixel(0, 0, 0)
     bb.show()
 
