@@ -14,7 +14,7 @@ import colorsys
 import os
 import glob
 
-import BlinkyTape
+import blinkytape
 
 # Get your API key at http://www.wunderground.com/weather/api
 # Specify it here or in the WUNDERGROUND_KEY environment var. E.g.:
@@ -35,7 +35,7 @@ def connect():
 
     print "BlinkyTape found at: %s" % port
 
-    bt = BlinkyTape.BlinkyTape(port)
+    bt = blinkytape.BlinkyTape(port)
     bt.displayColor(0, 0, 0)
     return bt
 

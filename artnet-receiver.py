@@ -4,7 +4,17 @@ import time
 from socket import (socket, AF_INET, SOCK_DGRAM)
 from struct import unpack
 
-import BlinkyTape
+import optparse
+import blinkytape 
+
+
+# Default Blinky Tape port on Raspberry Pi is /dev/ttyACM0
+parser = optparse.OptionParser()
+parser.add_option("-p", "--port", dest="portname",
+                  help="serial port (ex: /dev/ttyacm0)", default="/dev/ttyacm0")
+parser.add_option("-l", "--length", dest="length",
+                  help="number of LEDs attached to the BlinkyTape controller", type=int, default=64)
+(options, args) = parser.parse_args()
 
 
 UDP_IP = "" # listen on all sockets- INADDR_ANY
@@ -14,8 +24,8 @@ UDP_PORT = 0x1936 # Art-net is supposed to only use this address
 PIXELS_PER_UNIVERSE = 170 # Number of pixels to expect on a universe
 BYTES_PER_PIXEL = 3
 
-BLINKYTAPE_DEVICE = "/dev/ttyACM0"
-BLINKYTAPE_LENGTH = 450
+BLINKYTAPE_DEVICE = options.portname
+BLINKYTAPE_LENGTH = options.length
 
 
 
@@ -65,7 +75,7 @@ def blinkytape_artnet_receiver():
     sock = socket(AF_INET, SOCK_DGRAM)  # UDP
     sock.bind((UDP_IP, UDP_PORT))
 
-    bt = BlinkyTape.BlinkyTape(BLINKYTAPE_DEVICE, BLINKYTAPE_LENGTH)
+    bt = blinkytape.BlinkyTape(BLINKYTAPE_DEVICE, BLINKYTAPE_LENGTH)
 
 
     lastSequence = 0

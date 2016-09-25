@@ -1,11 +1,12 @@
 import time
 import sys
-from BlinkyTape import BlinkyTape
+import optparse
+from blinkytape import BlinkyTape
 
 
 class ModeManager(object):
-    def __init__(self, device='/dev/ttyACM0', *args, **kwargs):
-        self.bb = BlinkyTape(device)
+    def __init__(self, port):
+        self.bb = BlinkyTape(port)
 
     def render(self, colors):
         self.bb.send_list(colors)
@@ -25,7 +26,15 @@ class ModeManager(object):
 
 
 if __name__ == "__main__":
-    mm = ModeManager()
+    # Default Blinky Tape port on Raspberry Pi is /dev/ttyACM0
+    parser = optparse.OptionParser()
+    parser.add_option("-p", "--port", dest="portname",
+                      help="serial port (ex: /dev/ttyACM0)", default="/dev/ttyACM0")
+    (options, args) = parser.parse_args()
+
+    port = options.portname
+
+    mm = ModeManager(port)
     from IPython import embed
 
     embed()

@@ -1,4 +1,4 @@
-from BlinkyTape import BlinkyTape
+from blinkytape import BlinkyTape
 import time
 
 bb = BlinkyTape('/dev/ttyACM0', 120)

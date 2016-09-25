@@ -5,7 +5,7 @@ Displays UNIX epoch time using 32 LEDs (white),
   localtime minutes using 6 LEDs (green),
   localtime seconds using 6 LEDs (blue)
 """
-from BlinkyTape import BlinkyTape
+from blinkytape import BlinkyTape
 import time
 from datetime import datetime, timedelta
 import optparse

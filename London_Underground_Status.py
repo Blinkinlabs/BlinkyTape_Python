@@ -8,7 +8,7 @@ MIT Licensed
 
 """
 
-from BlinkyTape import BlinkyTape
+from blinkytape import BlinkyTape
 from time import sleep
 import optparse
 import urllib

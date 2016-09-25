@@ -1,6 +1,6 @@
-"""Simple animation example using BlinkyTape.py"""
+"""Simple animation example using blinkytape.py"""
 
-from BlinkyTape import BlinkyTape
+from blinkytape import BlinkyTape
 from time import sleep
 import optparse
 

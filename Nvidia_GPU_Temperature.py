@@ -3,7 +3,7 @@
 """
 
 import time
-from BlinkyTape import BlinkyTape
+from blinkytape import BlinkyTape
 import subprocess
 import os
 import re
