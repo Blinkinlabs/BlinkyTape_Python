@@ -5,7 +5,7 @@ from socket import (socket, AF_INET, SOCK_DGRAM)
 from struct import unpack
 
 import optparse
-import blinkytape 
+import blinkytape
 
 
 # Default Blinky Tape port on Raspberry Pi is /dev/ttyACM0
@@ -17,16 +17,15 @@ parser.add_option("-l", "--length", dest="length",
 (options, args) = parser.parse_args()
 
 
-UDP_IP = "" # listen on all sockets- INADDR_ANY
-UDP_PORT = 0x1936 # Art-net is supposed to only use this address
+UDP_IP = ""  # listen on all sockets- INADDR_ANY
+UDP_PORT = 0x1936  # Art-net is supposed to only use this address
 
 
-PIXELS_PER_UNIVERSE = 170 # Number of pixels to expect on a universe
+PIXELS_PER_UNIVERSE = 170  # Number of pixels to expect on a universe
 BYTES_PER_PIXEL = 3
 
 BLINKYTAPE_DEVICE = options.portname
 BLINKYTAPE_LENGTH = options.length
-
 
 
 class ArtnetPacket:
@@ -55,17 +54,16 @@ class ArtnetPacket:
         (packet.op_code,) = unpack('!H', raw_data[8:10])
         if packet.op_code != ArtnetPacket.OP_OUTPUT:
             return None
- 
- 
+
         (packet.op_code, packet.ver, packet.sequence, packet.physical,
             packet.universe, packet.length) = unpack('!HHBBHH', raw_data[8:18])
- 
+
         (packet.universe,) = unpack('<H', raw_data[14:16])
- 
+
         (packet.data,) = unpack(
             '{0}s'.format(int(packet.length)),
             raw_data[18:18+int(packet.length)])
- 
+
         return packet
 
 
@@ -76,7 +74,6 @@ def blinkytape_artnet_receiver():
     sock.bind((UDP_IP, UDP_PORT))
 
     bt = blinkytape.BlinkyTape(BLINKYTAPE_DEVICE, BLINKYTAPE_LENGTH)
-
 
     lastSequence = 0
 
@@ -95,13 +92,14 @@ def blinkytape_artnet_receiver():
                 packetCount += 1
 
                 while len(datas) < packet.universe + 1:
-                    print("adding new universe %i"%(packet.universe))
+                    print("adding new universe %i" % (packet.universe))
                     datas.append('')
 
                 datas[packet.universe] = bytearray(packet.data)
 
                 # Send an update to the tape when a new sequence is received on the last universe
-                if packet.universe == (len(datas)-1): # and lastSequence != packet.sequence: some artnet doesn't provide sequence updates
+                # and lastSequence != packet.sequence: some artnet doesn't provide sequence updates
+                if packet.universe == (len(datas)-1):
                     outputData = bytearray()
 
                     for data in datas:
@@ -109,7 +107,9 @@ def blinkytape_artnet_receiver():
                             data = data[0:PIXELS_PER_UNIVERSE*BYTES_PER_PIXEL]
 
                         if len(data) < PIXELS_PER_UNIVERSE*BYTES_PER_PIXEL:
-                            data = data + ('\x00' * (PIXELS_PER_UNIVERSE*BYTES_PER_PIXEL - len(data)))
+                            data = data + \
+                                ('\x00' * (PIXELS_PER_UNIVERSE *
+                                           BYTES_PER_PIXEL - len(data)))
 
                         outputData.extend(data)
 
@@ -119,14 +119,14 @@ def blinkytape_artnet_receiver():
                     bt.sendData(outputDataStr)
                     lastSequence = packet.sequence
 
-
             if time.time() > lastTime+1:
-                print("Packets per second: %i"%(packetCount))
+                print("Packets per second: %i" % (packetCount))
                 packetCount = 0
                 lastTime = time.time()
 
         except KeyboardInterrupt:
             sock.close()
             sys.exit()
+
 
 blinkytape_artnet_receiver()

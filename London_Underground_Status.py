@@ -8,16 +8,16 @@ MIT Licensed
 
 """
 
+import tempfile
+import json
 from blinkytape import BlinkyTape
 from time import sleep
 import optparse
 import sys
-if (sys.version_info > (3, 0)):
+if sys.version_info > (3, 0):
     import urllib.request as requestlib
 else:
     import urllib2 as requestlib
-import json
-import tempfile
 
 # Default Blinky Tape port on Raspberry Pi is /dev/ttyACM0
 parser = optparse.OptionParser()
@@ -34,20 +34,20 @@ else:
 
 url = "https://api.tfl.gov.uk/line/mode/tube,overground,dlr,tflrail/status"
 
-colours = { "bakerloo" : (137, 78, 36),
-            "central" : (220, 36, 31),
-            "circle" : (255, 206, 0),
-            "district" : (0, 114, 41),
-            "dlr" : (0, 175, 173),
-            "hammersmith-city" : (215, 153, 175),
-            "jubilee" : (106, 114, 120), 
-            "london-overground" : (232, 106, 16),
-            "metropolitan" : (117, 16, 86),
-            "northern" : (0, 0, 0),
-            "piccadilly" : (0, 25, 168),
-            "victoria" : (0, 160, 226),
-            "waterloo-city" : (118, 208, 189),
-            "tfl-rail" : (0, 25, 168) }
+colours = {"bakerloo": (137, 78, 36),
+           "central": (220, 36, 31),
+           "circle": (255, 206, 0),
+           "district": (0, 114, 41),
+           "dlr": (0, 175, 173),
+           "hammersmith-city": (215, 153, 175),
+           "jubilee": (106, 114, 120),
+           "london-overground": (232, 106, 16),
+           "metropolitan": (117, 16, 86),
+           "northern": (0, 0, 0),
+           "piccadilly": (0, 25, 168),
+           "victoria": (0, 160, 226),
+           "waterloo-city": (118, 208, 189),
+           "tfl-rail": (0, 25, 168)}
 
 bt = BlinkyTape(port)
 
@@ -66,7 +66,7 @@ while True:
             raise Exception("Error parsing data")
 
         # Sort the lines
-        lines.sort(key = lambda l: l['modeName'], reverse = True)
+        lines.sort(key=lambda l: l['modeName'], reverse=True)
 
         # Takes at least 2 min
         for cycles in range(240):
@@ -89,7 +89,7 @@ while True:
                         bt.sendPixel(l * r, l * g, l * b)
                     else:
                         bt.sendPixel(r, g, b)
-            for pixel in range(2):        
+            for pixel in range(2):
                 bt.sendPixel(0, 0, 0)
             bt.show()
             sleep(0.5)
@@ -97,6 +97,5 @@ while True:
     except:
         # Blue indicates an error
         bt.displayColor(0, 0, 100)
-        sleep(120) # wait 2 min
+        sleep(120)  # wait 2 min
         pass
-

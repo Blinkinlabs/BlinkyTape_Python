@@ -8,37 +8,36 @@ import subprocess
 import os
 import re
 
-## To find your COM port number in Windows, run "Pattern Paint -> Help -> System Information"
+# To find your COM port number in Windows, run "Pattern Paint -> Help -> System Information"
 #bb = BlinkyTape('/dev/tty.usbmodemfa131')
 bb = BlinkyTape('COM3')
 
 while True:
 
-    output = str(subprocess.check_output(["C:\\Program Files\\NVIDIA Corporation\\NVSMI\\nvidia-smi.exe", "-a"], shell=True))
-    #os.popen('C:\\Program Files\NVIDIA Corporation\NVSMI\nvidia-smi.exe')
+    output = str(subprocess.check_output(
+        ["C:\\Program Files\\NVIDIA Corporation\\NVSMI\\nvidia-smi.exe", "-a"], shell=True))
+    # os.popen('C:\\Program Files\NVIDIA Corporation\NVSMI\nvidia-smi.exe')
     #output=os.popen("C:\\Program Files\\NVIDIA Corporation\\NVSMI\\nvidia-smi.exe").read()
 
     #print("====" + str(output) + "=====")
-    temp = re.search("GPU Current.*",output).group()[30:33]
+    temp = re.search("GPU Current.*", output).group()[30:33]
 
     temp_baseline = 55  # configure to you base line temp here
     temp_multiplier = 5
-    color_temp = (int(temp) - temp_baseline ) * temp_multiplier
-    green = min(254, max(0,100 - color_temp))
-    red = min(254, max(0,0 + color_temp))
+    color_temp = (int(temp) - temp_baseline) * temp_multiplier
+    green = min(254, max(0, 100 - color_temp))
+    red = min(254, max(0, 0 + color_temp))
     blue = 0
     print("Current GPU Temp: %s   RGB: %s %s %s" % (temp, red, green, blue))
-    
+
     for x in range(60):
         bb.sendPixel(red, green, blue)
     bb.show()
-    
-    #time.sleep(1)
-    
-    #for x in range(60):
+
+    # time.sleep(1)
+
+    # for x in range(60):
     #    bb.sendPixel(100, 0, 0)
-    #bb.show()
+    # bb.show()
 
     time.sleep(1)
-
-    
