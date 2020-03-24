@@ -91,32 +91,32 @@ def blinkytape_artnet_receiver():
             packet = ArtnetPacket.unpack_raw_artnet_packet(data)
 
             if packet != None:
-		#print("Sequence=%i universe=%i"%(packet.sequence,packet.universe))
+                # print("Sequence=%i universe=%i"%(packet.sequence,packet.universe))
                 packetCount += 1
 
                 while len(datas) < packet.universe + 1:
                     print("adding new universe %i"%(packet.universe))
                     datas.append('')
 
-                datas[packet.universe] = packet.data
+                datas[packet.universe] = bytearray(packet.data)
 
                 # Send an update to the tape when a new sequence is received on the last universe
-            	if packet.universe == (len(datas)-1) and lastSequence != packet.sequence:
-                    outputData = ''
-                    #print(datas)
+                if packet.universe == (len(datas)-1): # and lastSequence != packet.sequence: some artnet doesn't provide sequence updates
+                    outputData = bytearray()
 
                     for data in datas:
                         if len(data) > PIXELS_PER_UNIVERSE*BYTES_PER_PIXEL:
                             data = data[0:PIXELS_PER_UNIVERSE*BYTES_PER_PIXEL]
 
                         if len(data) < PIXELS_PER_UNIVERSE*BYTES_PER_PIXEL:
-                            data += '\x00' * (PIXELS_PER_UNIVERSE*BYTES_PER_PIXEL - len(data))
+                            data = data + ('\x00' * (PIXELS_PER_UNIVERSE*BYTES_PER_PIXEL - len(data)))
 
-                        outputData += data
+                        outputData.extend(data)
 
-                        #print(len(outputData))
-
-                    bt.sendData(outputData)
+                    outputDataStr = ""
+                    for b in outputData:
+                        outputDataStr += chr(b)
+                    bt.sendData(outputDataStr)
                     lastSequence = packet.sequence
 
 
