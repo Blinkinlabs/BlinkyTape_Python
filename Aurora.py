@@ -11,10 +11,15 @@ MIT Licensed
 
 """
 
+
 from blinkytape import BlinkyTape
 from time import sleep
 from xml.etree import ElementTree
-import urllib2
+import sys
+if (sys.version_info > (3, 0)):
+    import urllib.request as requestlib
+else:
+    import urllib2 as requestlib
 import optparse
 
 # Default Blinky Tape port on Raspberry Pi is /dev/ttyACM0
@@ -26,8 +31,8 @@ parser.add_option("-p", "--port", dest="portname",
 if options.portname is not None:
     port = options.portname
 else:
-    print "Usage: python Aurora.py -p <port name>"
-    print "(ex.: python Aurora.py -p /dev/ttyACM0)"
+    print("Usage: python Aurora.py -p <port name>")
+    print("(ex.: python Aurora.py -p /dev/ttyACM0)")
     exit()
 
 # Documentation: http://aurorawatch.lancs.ac.uk/api_info/
@@ -35,9 +40,9 @@ else:
 url = 'http://aurorawatch.lancs.ac.uk/api/0.1/status.xml'
 bt = BlinkyTape(port)
 
-request = urllib2.Request(url)
+request = requestlib.Request(url)
 request.add_header('User-Agent', 'BlinkyTape Aurora Alert unop.uk')
-opener = urllib2.build_opener()
+opener = requestlib.build_opener()
 
 # Some visual indication that it works, for headless setups (green tape)
 bt.displayColor(0, 100, 0)
@@ -45,7 +50,7 @@ sleep(2)
 
 while True:
     try:
-        print "GET %s" % (url)
+        print("GET %s" % (url))
         rawXml = opener.open(request).read()
         tree = ElementTree.fromstring(rawXml)  
 
@@ -53,10 +58,10 @@ while True:
             raise Exception("Error loading data")
 
         currentStateName = tree.find('current').find('state').get('name')
-        print currentStateName
+        print(currentStateName)
 
         if currentStateName != "red":
-            for x in xrange(300):
+            for x in range(300):
                 bt.displayColor(0, 0, 0)
                 sleep(1)
         else:

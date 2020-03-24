@@ -1,4 +1,4 @@
-from BlinkyTape import BlinkyTape
+from blinkytape import BlinkyTape
 
 
 class BaseMode(object):

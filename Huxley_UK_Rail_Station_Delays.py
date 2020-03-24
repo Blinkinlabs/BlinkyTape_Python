@@ -17,7 +17,11 @@ from blinkytape import BlinkyTape
 from time import sleep
 from itertools import chain
 import optparse
-import urllib
+import sys
+if (sys.version_info > (3, 0)):
+    import urllib.request as requestlib
+else:
+    import urllib2 as requestlib
 import json
 import tempfile
 
@@ -41,8 +45,8 @@ parser.add_option("-p", "--port", dest="portname",
 if options.portname is not None:
     port = options.portname
 else:
-    print "Usage: python Huxley_UK_Rail_Station_Delays.py -p <port name>"
-    print "(ex.: python Huxley_UK_Rail_Station_Delays.py -p /dev/ttyACM0)"
+    print("Usage: python Huxley_UK_Rail_Station_Delays.py -p <port name>")
+    print("(ex.: python Huxley_UK_Rail_Station_Delays.py -p /dev/ttyACM0)")
     exit()
 
 url = "https://huxley.apphb.com/delays/{}/to/{}/50/{}?accessToken={}".format(crs, filterCrs, trainTime, accessToken)
@@ -56,8 +60,8 @@ sleep(2)
 
 while True:
     try:
-        print "GET %s" % (url)
-        rawHttpResponse = urllib.urlopen(url)
+        print("GET %s" % (url))
+        rawHttpResponse = requestlib.urlopen(url)
         stationStatus = json.load(rawHttpResponse)
 
         if not len(stationStatus) or stationStatus is None:
@@ -65,12 +69,12 @@ while True:
 
         alert = stationStatus["delays"] # bool
 
-        print "%s to %s - Trains Delayed by over 5 minutes: %s" % (
-        stationStatus["locationName"], stationStatus["filterLocationName"], stationStatus["delays"])
+        print("%s to %s - Trains Delayed by over 5 minutes: %s" % (
+        stationStatus["locationName"], stationStatus["filterLocationName"], stationStatus["delays"]))
 
         # Throb red for delays (or black for none) - takes at least 2 min
-        for x in xrange(60):
-            for y in chain(xrange(100), xrange(100, 0, -1)):
+        for x in range(60):
+            for y in chain(range(100), range(100, 0, -1)):
                 bt.displayColor(y * alert, 0, 0)
                 sleep(0.01)
 

@@ -7,7 +7,7 @@ class RandomFlashMode(FixedColorMixin, BaseMode):
     last = 0
 
     def calc_next_step(self):
-        self.colors[self.last] = 0, 0, 0
+        self.colors[self.last] = (0, 0, 0)
         self.last = random.randint(0, len(self.colors) - 1)
         if self.fixed_color:
             self.colors[self.last] = self.fixed_color
@@ -32,7 +32,7 @@ class FillUpMode(FixedColorMixin, BaseMode):
 
     def calc_next_step(self):
         if self.clear_last:
-            self.colors[self.last] = 0, 0, 0
+            self.colors[self.last] = (0, 0, 0)
         if self.fill:
             self.last -= 1
             self.colors[self.last] = self.fixed_color if self.fixed_color else self.color
@@ -57,8 +57,8 @@ class FillUpMode(FixedColorMixin, BaseMode):
                     self.pos = 0
                     self.fill = 1
                     self.clear_last = 0
-                    self.color = 0, 0, 0
-                    while self.color == 0, 0, 0:
+                    self.color = (0, 0, 0)
+                    while self.color == (0, 0, 0):
                         self.color = (
                             random.randint(0, 1) * 254,
                             random.randint(0, 1) * 254,
@@ -70,13 +70,13 @@ class FillUpMode(FixedColorMixin, BaseMode):
 
 class FlashMode(FixedColorMixin, BaseMode):
     on = 0
-    color = 0, 0, 254
+    color = (0, 0, 254)
 
     def calc_next_step(self):
         if self.on:
             self.on = 0
             for i in range(self.led_count):
-                self.colors[i] = 0, 0, 0
+                self.colors[i] = (0, 0, 0)
         else:
             self.on = 1
             for i in range(self.led_count):
@@ -116,27 +116,27 @@ class PoliceMode2(BaseMode):
     def calc_next_step(self):
         if self.step % 4 == 0:
             if self.mid_left:
-                for i in range(self.led_count / 2 - self.mid_width / 2, self.led_count / 2):
-                    self.colors[i] = 0, 0, 0
-                for i in range(self.led_count / 2, self.led_count / 2 + self.mid_width / 2):
-                    self.colors[i] = 0, 0, 254
+                for i in range(int(self.led_count / 2 - self.mid_width / 2), int(self.led_count / 2)):
+                    self.colors[i] = (0, 0, 0)
+                for i in range(int(self.led_count / 2), int(self.led_count / 2 + self.mid_width / 2)):
+                    self.colors[i] = (0, 0, 254)
                 self.mid_left = 0
             else:
-                for i in range(self.led_count / 2 - self.mid_width / 2, self.led_count / 2):
-                    self.colors[i] = 254, 0, 0
-                for i in range(self.led_count / 2, self.led_count / 2 + self.mid_width / 2):
-                    self.colors[i] = 0, 0, 0
+                for i in range(int(self.led_count / 2 - self.mid_width / 2), int(self.led_count / 2)):
+                    self.colors[i] = (254, 0, 0)
+                for i in range(int(self.led_count / 2), int(self.led_count / 2 + self.mid_width / 2)):
+                    self.colors[i] = (0, 0, 0)
                 self.mid_left = 1
         if self.step <= 1:
-            for i in range(self.led_count / 2 - self.mid_width / 2):
-                self.colors[i] = 0, 0, 0
-            for i in range(self.led_count / 2 + self.mid_width / 2, self.led_count):
-                self.colors[i] = 0, 0, 0
+            for i in range(int(self.led_count / 2 - self.mid_width / 2)):
+                self.colors[i] = (0, 0, 0)
+            for i in range(int(self.led_count / 2 + self.mid_width / 2), self.led_count):
+                self.colors[i] = (0, 0, 0)
         else:
-            for i in range(self.led_count / 2 - self.mid_width / 2):
-                self.colors[i] = 0, 0, 254
-            for i in range(self.led_count / 2 + self.mid_width / 2, self.led_count):
-                self.colors[i] = 254, 0, 0
+            for i in range(int(self.led_count / 2 - self.mid_width / 2)):
+                self.colors[i] = (0, 0, 254)
+            for i in range(int(self.led_count / 2 + self.mid_width / 2), self.led_count):
+                self.colors[i] = (254, 0, 0)
 
         self.step += 1
         if self.step >= self.max_steps:
