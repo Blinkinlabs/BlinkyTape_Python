@@ -6,7 +6,11 @@
 # before running this script
 
 import time
-import urllib
+import sys
+if (sys.version_info > (3, 0)):
+    import urllib.request as requestlib
+else:
+    import urllib2 as requestlib
 import json
 import tempfile
 import sys
@@ -28,12 +32,13 @@ url = "http://api.wunderground.com/api/{}/hourly/q/{}/{}.json".format(apikey, st
 
 def connect():
     serialPorts = glob.glob("/dev/cu.usbmodem*")
-    port = serialPorts[0]
+    # port = serialPorts[0]
+    port = 'com3'
 
     if not port:
         sys.exit("Could not locate a BlinkyTape.")
 
-    print "BlinkyTape found at: %s" % port
+    print("BlinkyTape found at: %s" % port)
 
     bt = blinkytape.BlinkyTape(port)
     bt.displayColor(0, 0, 0)
@@ -41,10 +46,10 @@ def connect():
 
 
 def get_hourly_data():
-    print "[%d] Fetching %s" % (time.time(), url)
+    print("[%d] Fetching %s" % (time.time(), url))
 
     try:
-        page_data = urllib.urlopen(url)
+        page_data = requestlib.urlopen(url)
         data = json.load(page_data)
 
         if not len(data) or data is None:
@@ -52,7 +57,7 @@ def get_hourly_data():
         return data
 
     except Exception as ex:
-        print ex
+        print(ex)
 
 
 color_map = {
@@ -80,7 +85,7 @@ def color_for_temp(temp):
     http://wattsupwiththat.com/2008/06/26/color-and-temperature-perception-is-everything/
     """
     color = None
-    for temp_ceil in sorted(color_map.iterkeys()):
+    for temp_ceil in sorted(color_map.keys()):
         color = color_map[temp_ceil]
         if temp < temp_ceil:
             break
@@ -103,10 +108,10 @@ if __name__ == "__main__":
         sys.exit(
             "Could not fetch weather data. Check your proxy settings and try again. Try: export http_proxy=PROXY_IP:PROXY_PORT before running this script.")
 
-    print data
+    print(data)
     for hour in data['hourly_forecast']:
         temp = int(hour['temp']['english'])
         r, g, b = color_for_temp(temp)
-        print "Temp: {}. Color: {},{},{}".format(temp, r, g, b)
+        print("Temp: {}. Color: {},{},{}".format(temp, r, g, b))
         bt.sendPixel(r, g, b)
     bt.show()

@@ -12,7 +12,7 @@ while True:
 
     time.sleep(.5)
 
-    for x in range(120):
+    for x in range(60):
         bb.sendPixel(0, 0, 0)
     bb.show()
 

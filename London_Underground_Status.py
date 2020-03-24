@@ -11,7 +11,11 @@ MIT Licensed
 from blinkytape import BlinkyTape
 from time import sleep
 import optparse
-import urllib
+import sys
+if (sys.version_info > (3, 0)):
+    import urllib.request as requestlib
+else:
+    import urllib2 as requestlib
 import json
 import tempfile
 
@@ -24,8 +28,8 @@ parser.add_option("-p", "--port", dest="portname",
 if options.portname is not None:
     port = options.portname
 else:
-    print "Usage: python London_Underground_Status.py -p <port name>"
-    print "(ex.: python London_Underground_Status.py -p /dev/ttyACM0)"
+    print("Usage: python London_Underground_Status.py -p <port name>")
+    print("(ex.: python London_Underground_Status.py -p /dev/ttyACM0)")
     exit()
 
 url = "https://api.tfl.gov.uk/line/mode/tube,overground,dlr,tflrail/status"
@@ -54,8 +58,8 @@ sleep(2)
 
 while True:
     try:
-        print "GET %s" % (url)
-        rawHttpResponse = urllib.urlopen(url)
+        print("GET %s" % (url))
+        rawHttpResponse = requestlib.urlopen(url)
         lines = json.load(rawHttpResponse)
 
         if not len(lines) or lines is None:
@@ -65,8 +69,8 @@ while True:
         lines.sort(key = lambda l: l['modeName'], reverse = True)
 
         # Takes at least 2 min
-        for cycles in xrange(240):
-            for pixel in xrange(2):
+        for cycles in range(240):
+            for pixel in range(2):
                 bt.sendPixel(0, 0, 0)
             for line in lines:
                 alert = False
@@ -75,7 +79,7 @@ while True:
                     if status['statusSeverity'] != 10:
                         alert = True
                 r, g, b = colours[line['id']]
-                for pixel in xrange(4):
+                for pixel in range(4):
                     if alert:
                         # Flash for delays
                         l = (cycles - pixel) % 2
@@ -85,7 +89,7 @@ while True:
                         bt.sendPixel(l * r, l * g, l * b)
                     else:
                         bt.sendPixel(r, g, b)
-            for pixel in xrange(2):        
+            for pixel in range(2):        
                 bt.sendPixel(0, 0, 0)
             bt.show()
             sleep(0.5)
