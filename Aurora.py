@@ -10,11 +10,12 @@ You need to save one of the images to the tape with pattern paint first.
 MIT Licensed
 
 """
-import sys
+
 
 from blinkytape import BlinkyTape
 from time import sleep
 from xml.etree import ElementTree
+import sys
 if (sys.version_info > (3, 0)):
     import urllib.request as requestlib
 else:
