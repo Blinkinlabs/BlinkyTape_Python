@@ -15,11 +15,13 @@ MAX_BRIGHTNESS = 50  # in range(255)
 
 def display(blinky):
     dt = datetime.now()
-    send_binary(int(time.time()), 32, blinky, MAX_BRIGHTNESS, MAX_BRIGHTNESS, MAX_BRIGHTNESS)
+    send_binary(int(time.time()), 32, blinky, MAX_BRIGHTNESS,
+                MAX_BRIGHTNESS, MAX_BRIGHTNESS)
     send_binary(dt.hour, 6, blinky, MAX_BRIGHTNESS, 0, 0)
     send_binary(dt.minute, 6, blinky, 0, MAX_BRIGHTNESS, 0)
     send_binary(dt.second, 6, blinky, 0, 0, MAX_BRIGHTNESS)
-    send_binary(0, 10, blinky, 0, 0, 0)  # padding empty pixels - can add more info
+    # padding empty pixels - can add more info
+    send_binary(0, 10, blinky, 0, 0, 0)
     blinky.show()
 
 
@@ -43,7 +45,8 @@ else:
     exit()
 
 blinky = BlinkyTape(port)
-time.sleep(1 - datetime.now().microsecond / 1000000.0)  # roughly synchronize with seconds
+# roughly synchronize with seconds
+time.sleep(1 - datetime.now().microsecond / 1000000.0)
 
 while True:
     timeBegin = time.time()

@@ -116,26 +116,26 @@ class PoliceMode2(BaseMode):
     def calc_next_step(self):
         if self.step % 4 == 0:
             if self.mid_left:
-                for i in range(int(self.led_count / 2 - self.mid_width / 2), int(self.led_count / 2)):
+                for i in range(self.led_count // 2 - self.mid_width // 2, self.led_count // 2):
                     self.colors[i] = (0, 0, 0)
-                for i in range(int(self.led_count / 2), int(self.led_count / 2 + self.mid_width / 2)):
+                for i in range(self.led_count // 2, self.led_count // 2 + self.mid_width // 2):
                     self.colors[i] = (0, 0, 254)
                 self.mid_left = 0
             else:
-                for i in range(int(self.led_count / 2 - self.mid_width / 2), int(self.led_count / 2)):
+                for i in range(self.led_count // 2 - self.mid_width // 2, self.led_count // 2):
                     self.colors[i] = (254, 0, 0)
-                for i in range(int(self.led_count / 2), int(self.led_count / 2 + self.mid_width / 2)):
+                for i in range(self.led_count // 2, self.led_count // 2 + self.mid_width // 2):
                     self.colors[i] = (0, 0, 0)
                 self.mid_left = 1
         if self.step <= 1:
-            for i in range(int(self.led_count / 2 - self.mid_width / 2)):
+            for i in range(self.led_count // 2 - self.mid_width // 2):
                 self.colors[i] = (0, 0, 0)
-            for i in range(int(self.led_count / 2 + self.mid_width / 2), self.led_count):
+            for i in range(self.led_count // 2 + self.mid_width // 2, self.led_count):
                 self.colors[i] = (0, 0, 0)
         else:
-            for i in range(int(self.led_count / 2 - self.mid_width / 2)):
+            for i in range(self.led_count // 2 - self.mid_width // 2):
                 self.colors[i] = (0, 0, 254)
-            for i in range(int(self.led_count / 2 + self.mid_width / 2), self.led_count):
+            for i in range(self.led_count // 2 + self.mid_width // 2, self.led_count):
                 self.colors[i] = (254, 0, 0)
 
         self.step += 1

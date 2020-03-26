@@ -5,20 +5,19 @@
 # export http_proxy=http://127.0.0.1:3213
 # before running this script
 
+import blinkytape
+import glob
+import os
+import colorsys
+import tempfile
+import json
 import time
 import sys
-if (sys.version_info > (3, 0)):
+if sys.version_info > (3, 0):
     import urllib.request as requestlib
 else:
     import urllib2 as requestlib
-import json
-import tempfile
-import sys
-import colorsys
-import os
-import glob
 
-import blinkytape
 
 # Get your API key at http://www.wunderground.com/weather/api
 # Specify it here or in the WUNDERGROUND_KEY environment var. E.g.:
@@ -27,13 +26,11 @@ import blinkytape
 apikey = os.environ.get('WUNDERGROUND_KEY')
 state = "NV"
 city = "Las_Vegas"
-url = "http://api.wunderground.com/api/{}/hourly/q/{}/{}.json".format(apikey, state, city)
+url = "http://api.wunderground.com/api/{}/hourly/q/{}/{}.json".format(
+    apikey, state, city)
 
 
-def connect():
-    serialPorts = glob.glob("/dev/cu.usbmodem*")
-    # port = serialPorts[0]
-    port = 'com3'
+def connect(port):
 
     if not port:
         sys.exit("Could not locate a BlinkyTape.")
@@ -101,7 +98,14 @@ def adjust_color(color, dim_factor=0.10):
 
 if __name__ == "__main__":
 
-    bt = connect()
+    import optparse
+
+    parser = optparse.OptionParser()
+    parser.add_option("-p", "--port", dest="portname",
+                    help="serial port (ex: /dev/ttyUSB0)", default=None)
+    (options, args) = parser.parse_args()
+
+    bt = connect(options.portname)
     data = get_hourly_data()
 
     if not data:

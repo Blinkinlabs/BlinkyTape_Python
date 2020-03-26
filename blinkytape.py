@@ -20,6 +20,7 @@ if sys.version_info < (3,):
         return x
 else:
     import codecs
+
     def encode(x):
         return codecs.latin_1_encode(x)[0]
 
@@ -65,7 +66,7 @@ class BlinkyTape(object):
         for r, g, b in colors:
             data += chr(r) + chr(g) + chr(b)
 
-        data = data.replace(chr(255),chr(254))
+        data = data.replace(chr(255), chr(254))
 
         self.serial.write(encode(data))
         self.show()
@@ -84,7 +85,7 @@ class BlinkyTape(object):
         """
         data = ""
         data = chr(r) + chr(g) + chr(b)
-        data = data.replace(chr(255),chr(254))
+        data = data.replace(chr(255), chr(254))
 
         if self.position < self.ledCount:
             if self.buffered:
@@ -152,7 +153,8 @@ if __name__ == "__main__":
                       help="serial port (ex: /dev/ttyUSB0)", default=None)
     parser.add_option("-c", "--ledcount", dest="ledcount",
                       help="number of LEDs attached", type="int", default=60)
-    parser.add_option("-b", action="store_true", default="True", dest="buffered")
+    parser.add_option("-b", action="store_true",
+                      default="True", dest="buffered")
     parser.add_option("-u", action="store_false", dest="buffered")
 
     (options, args) = parser.parse_args()

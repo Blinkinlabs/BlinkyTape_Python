@@ -26,8 +26,8 @@ while True:
     for position in range(-options.size, options.ledcount + options.size):
         for led in range(options.ledcount):
             if abs(position - led) < options.size:
-                blinky.sendPixel(255,0,200)
+                blinky.sendPixel(255, 0, 200)
             else:
-                blinky.sendPixel(0,0,0)
+                blinky.sendPixel(0, 0, 0)
         blinky.show()
         sleep(0.005)

@@ -13,17 +13,17 @@ MIT Licensed
 
 """
 
+import tempfile
+import json
 from blinkytape import BlinkyTape
 from time import sleep
 from itertools import chain
 import optparse
 import sys
-if (sys.version_info > (3, 0)):
+if sys.version_info > (3, 0):
     import urllib.request as requestlib
 else:
     import urllib2 as requestlib
-import json
-import tempfile
 
 
 # This token will only work on the demo server. You may also want to host Huxley yourself.
@@ -33,7 +33,8 @@ accessToken = "DA1C7740-9DA0-11E4-80E6-A920340000B1"
 # CRS codes here: http://www.nationalrail.co.uk/static/documents/content/station_codes.csv
 crs = "clj"        # Clapham Junction
 filterCrs = "wat"  # to Waterloo
-trainTime = ""     # STD of a specific train to look for (24hr format HHmm) blank for none
+# STD of a specific train to look for (24hr format HHmm) blank for none
+trainTime = ""
 
 
 # Default Blinky Tape port on Raspberry Pi is /dev/ttyACM0
@@ -49,7 +50,8 @@ else:
     print("(ex.: python Huxley_UK_Rail_Station_Delays.py -p /dev/ttyACM0)")
     exit()
 
-url = "https://huxley.apphb.com/delays/{}/to/{}/50/{}?accessToken={}".format(crs, filterCrs, trainTime, accessToken)
+url = "https://huxley.apphb.com/delays/{}/to/{}/50/{}?accessToken={}".format(
+    crs, filterCrs, trainTime, accessToken)
 
 bt = BlinkyTape(port)
 
@@ -67,10 +69,10 @@ while True:
         if not len(stationStatus) or stationStatus is None:
             raise Exception("Error parsing data")
 
-        alert = stationStatus["delays"] # bool
+        alert = stationStatus["delays"]  # bool
 
         print("%s to %s - Trains Delayed by over 5 minutes: %s" % (
-        stationStatus["locationName"], stationStatus["filterLocationName"], stationStatus["delays"]))
+            stationStatus["locationName"], stationStatus["filterLocationName"], stationStatus["delays"]))
 
         # Throb red for delays (or black for none) - takes at least 2 min
         for x in range(60):
@@ -81,6 +83,5 @@ while True:
     except:
         # Blue indicates an error
         bt.displayColor(0, 0, 100)
-        sleep(120) # wait 2 min
+        sleep(120)  # wait 2 min
         pass
-

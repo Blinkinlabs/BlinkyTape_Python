@@ -12,15 +12,15 @@ MIT Licensed
 """
 
 
+import optparse
 from blinkytape import BlinkyTape
 from time import sleep
 from xml.etree import ElementTree
 import sys
-if (sys.version_info > (3, 0)):
+if sys.version_info > (3, 0):
     import urllib.request as requestlib
 else:
     import urllib2 as requestlib
-import optparse
 
 # Default Blinky Tape port on Raspberry Pi is /dev/ttyACM0
 parser = optparse.OptionParser()
@@ -52,7 +52,7 @@ while True:
     try:
         print("GET %s" % (url))
         rawXml = opener.open(request).read()
-        tree = ElementTree.fromstring(rawXml)  
+        tree = ElementTree.fromstring(rawXml)
 
         if not len(tree) or tree is None:
             raise Exception("Error loading data")
@@ -66,11 +66,10 @@ while True:
                 sleep(1)
         else:
             # Tape resets to stored pattern after a few seconds of inactivity
-            sleep(300) # Wait 5min
-            
+            sleep(300)  # Wait 5min
+
     except:
         # Blue indicates an error
         bt.displayColor(0, 0, 100)
-        sleep(300) # Wait 5min
+        sleep(300)  # Wait 5min
         pass
-
