@@ -94,8 +94,8 @@ while True:
         a = np.asarray(im)  # of shape (rows, cols, channels)
 
         # map loc latitude to 0-based index 
-        latitude_index =  max(0, (int)(((loc[0] - -90) / (90 - -90)) * (rows - 0) + 0) - 1)
-        longitude_index = max(0, (int)(((loc[1] - -180) / (180 - -180)) * (cols - 0) + 0) - 1)
+        latitude_index = min(rows - 1, max(0, (int)(((loc[0] - -90) / (90 - -90)) * (rows - 0) + 0)))
+        longitude_index = min(cols - 1, max(0, (int)(((loc[1] - -180) / (180 - -180)) * (cols - 0) + 0)))
         
         # update the location of the next row of elevation data to take
         loc[0] += delta 
