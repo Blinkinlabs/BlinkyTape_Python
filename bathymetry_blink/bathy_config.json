@@ -1,7 +1,8 @@
 {
 	"location": [42.3508962958944, -71.104892234074],
-	"port": "COM5",
-	"update_rate": 10,
-	"delta_latitude": 5,
-	"num_leds": 60
+	"port": "COM4",
+	"update_rate": 0.1,
+	"delta_latitude": 2,
+	"num_leds": 60,
+	"image": "./bathymetry_blink/mapserv.png"
 }
