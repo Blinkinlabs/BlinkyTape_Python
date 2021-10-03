@@ -41,7 +41,7 @@ from blinkytape import BlinkyTape
 from time import sleep
 from PIL import Image
 import numpy as np
-from serial import PortNotOpenError
+import sys
 
 # Obtain default parameters
 with open("./bathymetry_blink/bathy_config.json") as f:
@@ -133,14 +133,7 @@ while True:
 
     except KeyboardInterrupt:
         print("Keyboard interrupt, ending program.")
-
-        # just show blue and disconnect.
-        # bt.displayColor(0, 0, 100)
-        bt.resetToBootloader()
-        try:
-            bt.close()
-        except PortNotOpenError as p:
-            print("Issue closing serial port: " + p.args[0])
+        sys.exit()
         
     except RuntimeError as e:
         print("Encountered runtime error: " + e.args[0])
