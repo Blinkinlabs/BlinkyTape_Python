@@ -108,14 +108,13 @@ while True:
         print("Lon index: " + str(longitude_index))
         print("Next latitude: " + str(loc[0]))
         
-        
         # grab the applicable pixel indices
-        indices = [(int)(x*(1200/n_leds)) for x in range(n_leds)]
+        indices = [(int)(x*(cols/n_leds)) for x in range(n_leds)]
         
         # sample that row of pixel data
         output_pixels = np.take(a[latitude_index], indices, axis=0)
         
-        # rotate the row such that the center of the 
+        # rotate the row to center around the specified longitude
         output_pixels = np.roll(output_pixels, longitude_index, axis=0)
         
         # send all pixel data to bt
