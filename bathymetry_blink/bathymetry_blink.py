@@ -43,6 +43,9 @@ from PIL import Image
 import numpy as np
 import sys
 
+MAX_ERRORS = 3
+num_errors = 0
+
 # Obtain default parameters
 with open("./bathymetry_blink/bathy_config.json") as f:
     config = json.load(f)
@@ -99,7 +102,7 @@ while True:
         
         # update the location of the next row of elevation data to take
         loc[0] += delta 
-        loc[0] = loc[0] % rows
+        loc[0] = ((loc[0] + 90) % 180) - 90  # wraps to next pole if overflow
         
         print("Lat index: " + str(latitude_index))
         print("Lon index: " + str(longitude_index))
@@ -117,7 +120,7 @@ while True:
         
         # send all pixel data to bt
         for pixel in output_pixels:
-            print("Sending r: %1, g: %2, b: %3".format(*pixel))
+            print("Sending r: {}, g: {}, b: {}".format(*pixel))
             bt.sendPixel(*pixel)
         
         # finally, show the image
@@ -140,3 +143,8 @@ while True:
         # flush any incomplete data
         bt.show()
         
+        num_errors += 1
+        
+        if num_errors > MAX_ERRORS:
+            sys.exit("Error count exceeds that allowed.")          
+      
