@@ -16,7 +16,7 @@ Uses the following arguments:
 	Update interval of the script, in minutes. Defaults to 10.
 -p/--port: str
 	Serial port of the BlinkyLight (e.g., 'ttyAMA0', 'COM3'). Defaults to 'COM5'. 
--d/--delate_latitude: int
+-d/--delta_latitude: int
     Vertical change in latitude every update rate. May be 0, but this will result in a never-changing LEDs. 
 -i/--image: str
     Name of the PNG image that contains the color coded pathymetric data.
