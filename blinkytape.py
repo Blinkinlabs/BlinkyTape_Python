@@ -51,7 +51,7 @@ class BlinkyTape(object):
         self.position = 0
         self.buffered = buffered
         self.buf = ""
-        self.serial = serial.Serial(port, 115200)
+        self.serial = serial.Serial(port, 115200, write_timeout=1)
         self.show()  # Flush any incomplete data
 
     def send_list(self, colors):
